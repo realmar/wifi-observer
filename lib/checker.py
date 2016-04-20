@@ -7,7 +7,7 @@ import time
 
 from lib.shell import disconnectWiFi, connectWiFi, checkIP, checkConnection, doPingAvr, getDBM, getBSSID, getIP
 
-def checkSSID(ssid, config):
+def checkSSID(ssid, encrypted, config):
     sanity = {'ssid' : ssid,
     'bssid' : 0,
     'time_start' : 0,
@@ -18,7 +18,7 @@ def checkSSID(ssid, config):
     time_start = time.time();
     sanity['time_start'] = time_start
 
-    connectWiFi(ssid, config['interface'])
+    connectWiFi(ssid, config['interface'], encrypted)
     while(True):
         if time.time() - time_start > config['checks']['failed']:
             break

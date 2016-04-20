@@ -19,8 +19,11 @@ def disconnectWiFi(interface):
     proc = subprocess.Popen(['iw', 'dev', interface, 'disconnect'], stdout=subprocess.PIPE)
     proc.communicate()
 
-def connectWiFi(ssid, interface):
-    proc = subprocess.Popen(['wpa_supplicant', '-B', '-i', interface, '-c', ''.join(['/etc/wpa_supplicant-', ssid, '.conf'])], stdout=subprocess.PIPE)
+def connectWiFi(ssid, interface, wpa):
+    if(wpa)
+        proc = subprocess.Popen(['wpa_supplicant', '-B', '-i', interface, ssid], stdout=subprocess.PIPE)
+    else:
+        proc = subprocess.Popen(['iw', 'dev',  interface, 'connect', ''.join(['/etc/wpa_supplicant-', ssid, '.conf'])], stdout=subprocess.PIPE)
 
 def getIP(interface):
     proc = subprocess.Popen(['dhclient', interface], stdout=subprocess.PIPE)
