@@ -43,4 +43,4 @@ def checkSSID(ssid, config):
     sanity['dbm'] = getDBM(config['interface'])
     sanity['bssid'] = getBSSID(config['interface'])
 
-    disconnectWiFi(interface)
+    disconnectWiFi(config['interface'])
