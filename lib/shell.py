@@ -20,7 +20,7 @@ def disconnectWiFi(interface):
     proc.communicate()
 
 def connectWiFi(ssid, interface, wpa):
-    if(wpa)
+    if(wpa):
         proc = subprocess.Popen(['wpa_supplicant', '-B', '-i', interface, ssid], stdout=subprocess.PIPE)
     else:
         proc = subprocess.Popen(['iw', 'dev',  interface, 'connect', ''.join(['/etc/wpa_supplicant-', ssid, '.conf'])], stdout=subprocess.PIPE)
