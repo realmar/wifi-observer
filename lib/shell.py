@@ -5,7 +5,7 @@
 
 import subprocess
 
-from utils import decodeUTF8
+from lib.utils import decodeUTF8
 
 def disconnectWiFi(interface):
     proc = subprocess.Popen(['killall', 'wpa_supplicant'], stdout=subprocess.PIPE)
