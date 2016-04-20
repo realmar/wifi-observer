@@ -33,7 +33,7 @@ def checkIP():
     proc = subprocess.Popen(['ip', 'a'], stdout=subprocess.PIPE)
     out = proc.communicate()
     out = decodeUTF8(out)
-    if 'inet 10.' in out || 'inet 172.30.' in out:
+    if 'inet 10.' in out or 'inet 172.30.' in out:
         return True
     else:
         return False
