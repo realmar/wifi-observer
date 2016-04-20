@@ -30,7 +30,7 @@ file.close()
 try:
     while(True):
         for ssid in config['checks']['ssids']:
-            sanity = checkSSID(ssid, encrypted, config)
+            sanity = checkSSID(ssid['name'], ssid['encrypted'], config)
 
         #writeCheck(db_connection, sanity)
         print(sanity)
