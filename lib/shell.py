@@ -14,6 +14,8 @@ def disconnectWiFi(interface):
 
 def connectWiFi(ssid, interface):
     proc = subprocess.Popen(['wpa_supplicant', '-B', '-i', interface, '-c', ''.join(['/etc/wpa_supplicant-', ssid])], stdout=subprocess.PIPE)
+
+def getIP(interface):
     proc = subprocess.Popen(['dhclient', interface], stdout=subprocess.PIPE)
     out = proc.communicate()
 
@@ -25,7 +27,7 @@ def checkIP():
     else:
         return False
 
-def checkConnection():
+def checkConnection(interface):
     proc = subprocess.Popen(['iw', 'dev', interface, 'link'], stdout=subprocess.PIPE)
     out = proc.communicate()
     if 'Not connected' in out:

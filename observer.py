@@ -6,7 +6,7 @@
 # base dir has to be set
 import sys
 
-BASE_DIR = ''
+BASE_DIR = '/opt/astro-wlan-analyzer'
 sys.path.append(BASE_DIR)
 
 import yaml
@@ -23,8 +23,8 @@ file = open(CONFIG, 'r')
 config = yaml.load(file)
 file.close()
 
-DB = os.path.join(BASE_DIR, config['database'])
-db_connection = connectDB(DB)
+#DB = os.path.join(BASE_DIR, config['database'])
+#db_connection = connectDB(DB)
 
 # excecution
 try:
