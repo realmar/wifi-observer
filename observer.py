@@ -32,8 +32,8 @@ try:
         for ssid in config['checks']['ssids']:
             sanity = checkSSID(ssid['name'], ssid['encrypted'], config)
 
-        #writeCheck(db_connection, sanity)
-        print(sanity)
+            #writeCheck(db_connection, sanity)
+            print(sanity)
 
         time.sleep(config['check']['interval'], config['interface'])
 
