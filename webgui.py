@@ -7,7 +7,7 @@ from flask import Flask
 app = Flask(__name__)
 
 # configuration
-DATABASE = 'awa.db'
+DATABASE = 'wifi-observer.db'
 
 @app.route("/")
 def hello():
