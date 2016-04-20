@@ -5,6 +5,8 @@
 
 import subprocess
 
+from utils import decodeUTF8
+
 def disconnectWiFi(interface):
     proc = subprocess.Popen(['killall', 'wpa_supplicant'], stdout=subprocess.PIPE)
     proc.communicate()
@@ -22,6 +24,7 @@ def getIP(interface):
 def checkIP():
     proc = subprocess.Popen(['killall', 'wpa_supplicant'], stdout=subprocess.PIPE)
     out = proc.communicate()
+    out = decodeUTF8(out)
     if 'inet 10.' in out:
         return True
     else:
@@ -38,6 +41,7 @@ def checkConnection(interface):
 def doPingAvr(target, interface, count):
     proc = subprocess.Popen(['ping', ''.join(['-c', count]), '-I', interface, target], stdout=subprocess.PIPE)
     out = proc.communicate()
+    out = decodeUTF8(out)
     out = out.split(' = ')[1]
     out = out.split(' ms')[0]
     out = out.split('/')[1]
@@ -47,6 +51,7 @@ def doPingAvr(target, interface, count):
 def getDBM(interface):
     proc = subprocess.Popen(['iw', 'dev', interface, 'link'], stdout=subprocess.PIPE)
     out = proc.communicate()
+    out = decodeUTF8(out)
     out = out.split('signal: ')[1]
     out = out.split(' dBm')[0]
 
@@ -55,6 +60,7 @@ def getDBM(interface):
 def getBSSID(interface):
     proc = subprocess.Popen(['iw', 'dev', interface, 'link'], stdout=subprocess.PIPE)
     out = proc.communicate()
+    out = decodeUTF8(out)
     out = out.split('Connected to ')[1]
     out = out.split(' (on ')[0]
 
