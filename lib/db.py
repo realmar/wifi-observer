@@ -17,8 +17,8 @@ def writeCheck(db_conn, sanity, timeout):
     bssid_id = checkEntry(db_conn, 'bssids', 'bssid', sanity['bssid'])
     ssid_id = checkEntry(db_conn, 'ssids', 'bssid', sanity['ssid'])
 
-    time_needed = 'NULL' if sanity['time_needed'] > timeout else sanity['time_needed']
-    ping_average = 'NULL' if sanity['ping_average'] == 0 else sanity['ping_average']
+    time_needed = 'NULL' if sanity['time_needed'] > timeout else str(int(sanity['time_needed']))
+    ping_average = 'NULL' if sanity['ping_average'] == 0 else str(int(sanity['ping_average']))
 
     sql_string = 'INSERT INTO data(time_needed, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + time_needed + ', ' + ping_average + ', ' + sanity['time_start'] + ', ' + sanity['dbm'] + ', ' + ssid_id + ', ' + bssid_id + ')'
 
