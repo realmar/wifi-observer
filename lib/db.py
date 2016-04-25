@@ -34,6 +34,8 @@ def writeCheck(db_conn, sanity, timeout):
         print('sql error: ' + e)
         return True
 
+    commit(db_conn)
+
 def checkEntry(db_conn, table, column, search):
     c = db_conn.cursor()
 
@@ -46,6 +48,8 @@ def checkEntry(db_conn, table, column, search):
 
     for entry in entries.fetchall():
         return entry[0]
+
+    commit(db_conn)
 
     return False
 
@@ -60,4 +64,9 @@ def insertSingle(db_conn, table, column, value):
         print('sql error: ' + e)
         return True
 
+    commit(db_conn)
+
     return False
+
+def commit(db_conn):
+    db_conn.commit()
