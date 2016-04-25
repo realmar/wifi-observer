@@ -55,8 +55,6 @@ def doPingAvr(target, interface, count):
     out = proc.communicate()
     out = decodeUTF8(out)
 
-    print(out)
-
     try:
         out = out.split(' = ')[1]
         out = out.split(' ms')[0]

@@ -52,6 +52,8 @@ def checkSSID(ssid, encrypted, config):
         sanity['dbm'] = getDBM(config['wifi_net']['interface'])
         sanity['bssid'] = getBSSID(config['wifi_net']['interface'])
 
+    sleep(10000)
+
     disconnectWiFi(config['wifi_net']['interface'], config['default_net'])
 
     return sanity
