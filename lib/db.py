@@ -23,14 +23,14 @@ def writeCheck(db_conn, sanity, timeout):
     sql_string = 'INSERT INTO data(time_needed, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + time_needed + ', ' + ping_average + ', ' + sanity['time_start'] + ', ' + sanity['dbm'] + ', ' + ssid_id + ', ' + bssid_id + ')'
 
     try:
-        entries = db_conn.cursor.execute(sql_string)
+        entries = db_conn.cursor().execute(sql_string)
     except sqlite3.Error as e:
         return True
 
 def checkEntry(db_conn, table, column, search):
     sql_string = 'SELECT id FROM ' + table + ' WHERE ' + column + '="' + search + '""'
     try:
-        entries = db_conn.cursor.execute(sql_string)
+        entries = db_conn.cursor().execute(sql_string)
     except sqlite3.Error as e:
         return True
 
@@ -43,7 +43,7 @@ def insertSingle(db_conn, table, column, value):
     sql_string = 'INSERT INTO ' + table + ' VALUES(' + columm + ')' + ' VALUES("' + value + '")'
 
     try:
-        entries = db_conn.cursor.execute(sql_string)
+        entries = db_conn.cursor().execute(sql_string)
     except sqlite3.Error as e:
         return True
 
