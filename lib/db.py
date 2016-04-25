@@ -17,7 +17,10 @@ def writeCheck(db_conn, sanity, timeout):
     bssid_id = checkEntry(db_conn, 'bssids', 'bssid', sanity['bssid'])
     ssid_id = checkEntry(db_conn, 'ssids', 'bssid', sanity['ssid'])
 
-    sql_string = 'INSERT INTO data(time_needed, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + (sanity['time_needed'] > timeout ? 'NULL' : sanity['time_needed']) + ', ' + (sanity['ping_average'] == 0 ? 'NULL' : sanity['ping_average']) + ', ' + sanity['time_start'] + ', ' + sanity['dbm'] + ', ' + ssid_id + ', ' + bssid_id + ')'
+    time_needed = sanity['time_needed'] > timeout ? 'NULL' : sanity['time_needed']
+    ping_average = sanity['ping_average'] == 0 ? 'NULL' : sanity['ping_average']
+
+    sql_string = 'INSERT INTO data(time_needed, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + time_needed + ', ' + ping_average + ', ' + sanity['time_start'] + ', ' + sanity['dbm'] + ', ' + ssid_id + ', ' + bssid_id + ')'
 
     try:
         entries = db_conn.cursor.execute(sql_string)
