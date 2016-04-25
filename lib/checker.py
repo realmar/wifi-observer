@@ -31,7 +31,7 @@ def checkSSID(ssid, encrypted, config):
 
     if not is_failed:
         print("getting IP")
-        getIP(config['interface'])
+        getIP(config['wifi_net']['interface'])
         while(True):
             if time.time() - time_start > config['checks']['failed']:
                 is_failed = True
@@ -49,7 +49,7 @@ def checkSSID(ssid, encrypted, config):
         sanity['dbm'] = 0
         sanity['bssid'] = 0
     else:
-        sanity['ping_average'] = doPingAvr(config['checks']['ping_target'], config['interface'], config['checks']['ping_c'])
+        sanity['ping_average'] = doPingAvr(config['checks']['ping_target'], config['wifi_net']['interface'], config['checks']['ping_c'])
         sanity['dbm'] = getDBM(config['wifi_net']['interface'])
         sanity['bssid'] = getBSSID(config['wifi_net']['interface'])
 
