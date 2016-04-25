@@ -17,9 +17,9 @@ def writeCheck(db_conn, sanity, timeout):
             insertSingle(db_conn, 'bssids', 'bssid', sanity['bssid'])
         bssid_id = checkEntry(db_conn, 'bssids', 'bssid', sanity['bssid'])
 
-    if(not checkEntry(db_conn, 'ssids', 'bssid', sanity['ssid'])):
-        insertSingle(db_conn, 'ssids', 'bssid', sanity['ssid'])
-    ssid_id = checkEntry(db_conn, 'ssids', 'bssid', sanity['ssid'])
+    if(not checkEntry(db_conn, 'ssids', 'ssid', sanity['ssid'])):
+        insertSingle(db_conn, 'ssids', 'ssid', sanity['ssid'])
+    ssid_id = checkEntry(db_conn, 'ssids', 'ssid', sanity['ssid'])
 
     time_needed = 'NULL' if sanity['time_needed'] > timeout else str(int(sanity['time_needed']))
     ping_average = 'NULL' if sanity['ping_average'] == 0 else str(sanity['ping_average'])
