@@ -10,6 +10,7 @@ def connectDB(db):
 
 def writeCheck(db_conn, sanity, timeout):
     bssid_id = sanity['bssid']
+    c = db_conn.cursor()
 
     if bssid_id != 'NULL':
         if(not checkEntry(db_conn, 'bssids', 'bssid', sanity['bssid'])):
@@ -26,14 +27,16 @@ def writeCheck(db_conn, sanity, timeout):
     sql_string = 'INSERT INTO data(time_needed, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + str(time_needed) + ', ' + str(ping_average) + ', ' + str(int(sanity['time_start'])) + ', ' + str(sanity['dbm']) + ', ' + str(ssid_id) + ', ' + str(bssid_id) + ')'
 
     try:
-        entries = db_conn.cursor().execute(sql_string)
+        entries = c.execute(sql_string)
     except sqlite3.Error as e:
         return True
 
 def checkEntry(db_conn, table, column, search):
+    c = db_conn.cursor()
+
     sql_string = 'SELECT id FROM ' + table + ' WHERE ' + column + '="' + search + '""'
     try:
-        entries = db_conn.cursor().execute(sql_string)
+        entries = c.execute(sql_string)
     except sqlite3.Error as e:
         return True
 
@@ -43,10 +46,12 @@ def checkEntry(db_conn, table, column, search):
     return False
 
 def insertSingle(db_conn, table, column, value):
+    c = db_conn.cursor()
+
     sql_string = 'INSERT INTO ' + table + ' VALUES(' + columm + ')' + ' VALUES("' + value + '")'
 
     try:
-        entries = db_conn.cursor().execute(sql_string)
+        entries = c.execute(sql_string)
     except sqlite3.Error as e:
         return True
 
