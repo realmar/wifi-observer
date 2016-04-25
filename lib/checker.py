@@ -37,7 +37,7 @@ def checkSSID(ssid, encrypted, config):
                 is_failed = True
                 break
 
-            if checkIP(config['checks'][ssid]['gateway']):
+            if checkIP(config['checks']['ssids'][ssid]['gateway']):
                 confDefaultGW(config['wifi_net']['interface'], config['checks']['ssids'][ssid]['gateway'])
                 break
 
