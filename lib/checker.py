@@ -54,3 +54,5 @@ def checkSSID(ssid, encrypted, config):
         sanity['bssid'] = getBSSID(config['wifi_net']['interface'])
 
     disconnectWiFi(config['wifi_net']['interface'], config['default_net'])
+
+    return sanity
