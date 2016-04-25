@@ -35,7 +35,7 @@ try:
             #writeCheck(db_connection, sanity)
             print(sanity)
 
-        time.sleep(config['check']['interval'])
+        time.sleep(config['checks']['interval'])
 
 except KeyboardInterrupt:
     print('Interrupted by User')
