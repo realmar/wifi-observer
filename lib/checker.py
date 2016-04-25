@@ -45,8 +45,8 @@ def checkSSID(ssid, encrypted, config):
 
     if is_failed:
         sanity['ping_average'] = 0
-        sanity['dbm'] = 0
-        sanity['bssid'] = 0
+        sanity['dbm'] = 'NULL'
+        sanity['bssid'] = 'NULL'
     else:
         sanity['ping_average'] = doPingAvr(config['checks']['ping_target'], config['wifi_net']['interface'], config['checks']['ping_c'])
         sanity['dbm'] = getDBM(config['wifi_net']['interface'])

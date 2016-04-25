@@ -9,12 +9,15 @@ def connectDB(db):
     return sqlite3.connect(db)
 
 def writeCheck(db_conn, sanity, timeout):
-    if(not checkEntry(db_conn, 'bssids', 'bssid', sanity['bssid'])):
-        insertSingle(db_conn, 'bssids', 'bssid', sanity['bssid'])
+    bssid_id = sanity['bssid']
+
+    if bssid_id != 'NULL':
+        if(not checkEntry(db_conn, 'bssids', 'bssid', sanity['bssid'])):
+            insertSingle(db_conn, 'bssids', 'bssid', sanity['bssid'])
+        bssid_id = checkEntry(db_conn, 'bssids', 'bssid', sanity['bssid'])
+
     if(not checkEntry(db_conn, 'ssids', 'bssid', sanity['ssid'])):
         insertSingle(db_conn, 'ssids', 'bssid', sanity['ssid'])
-
-    bssid_id = checkEntry(db_conn, 'bssids', 'bssid', sanity['bssid'])
     ssid_id = checkEntry(db_conn, 'ssids', 'bssid', sanity['ssid'])
 
     time_needed = 'NULL' if sanity['time_needed'] > timeout else str(int(sanity['time_needed']))

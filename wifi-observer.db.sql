@@ -15,11 +15,11 @@ CREATE TABLE bssids (
 CREATE TABLE  data (
   id INTEGER UNSIGNED NOT NULL PRIMARY KEY,
   time_needed   INTEGER UNSIGNED NULL,
-  ping_average  TIMESTAMP NULL,
+  ping_average  FLOAT NULL,
   time_start    TIMESTAMP NOT NULL,
   dbm           INTEGER NULL,
   ssid_fk       INTEGER UNSIGNED NOT NULL,
-  bssid_fk      INTEGER UNSIGNED NOT NULL,
+  bssid_fk      INTEGER UNSIGNED NULL,
   FOREIGN KEY(ssid_fk) REFERENCES ssids(id),
   FOREIGN KEY(bssid_fk) REFERENCES bssids(id)
 );
