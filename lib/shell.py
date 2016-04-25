@@ -7,7 +7,7 @@ import subprocess
 
 from lib.utils import decodeUTF8
 
-def disconnectWiFi(interface):
+def disconnectWiFi(interface, defaults):
     proc = subprocess.Popen(['killall', 'wpa_supplicant'], stdout=subprocess.PIPE)
     proc.communicate()
 
@@ -19,21 +19,24 @@ def disconnectWiFi(interface):
     proc = subprocess.Popen(['iw', 'dev', interface, 'disconnect'], stdout=subprocess.PIPE)
     proc.communicate()
 
+    confDefaultGW(defaults['interface'], defaults['gateway'])
+
 def connectWiFi(ssid, interface, wpa):
     if(wpa):
         proc = subprocess.Popen(['wpa_supplicant', '-B', '-i', interface, '-c', ''.join(['/etc/wpa_supplicant-', ssid, '.conf'])], stdout=subprocess.PIPE)
     else:
+        proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE)
         proc = subprocess.Popen(['iw', 'dev',  interface, 'connect', ssid ], stdout=subprocess.PIPE)
 
 def getIP(interface):
     proc = subprocess.Popen(['dhclient', interface], stdout=subprocess.PIPE)
     out = proc.communicate()
 
-def checkIP():
+def checkIP(gw):
     proc = subprocess.Popen(['ip', 'a'], stdout=subprocess.PIPE)
     out = proc.communicate()
     out = decodeUTF8(out)
-    if 'inet 10.' in out or 'inet 172.30.' in out:
+    if ''.join(['inet ', gw[0:4]]) in out:
         return True
     else:
         return False
@@ -51,9 +54,12 @@ def doPingAvr(target, interface, count):
     proc = subprocess.Popen(['ping', ''.join(['-c', str(count)]), '-I', interface, target], stdout=subprocess.PIPE)
     out = proc.communicate()
     out = decodeUTF8(out)
-    out = out.split(' = ')[1]
-    out = out.split(' ms')[0]
-    out = out.split('/')[1]
+    try:
+        out = out.split(' = ')[1]
+        out = out.split(' ms')[0]
+        out = out.split('/')[1]
+    except:
+        return 0
 
     return out
 
@@ -74,3 +80,9 @@ def getBSSID(interface):
     out = out.split(' (on ')[0]
 
     return out
+
+def confDefaultGW(interface, gw):
+    proc = subprocess.Popen(['ip', 'route', 'del', 'default'], stdout=subprocess.PIPE)
+    out = proc.communicate()
+    proc = subprocess.Popen(['ip', 'route', 'add', 'default', 'via', gw, 'dev', interface], stdout=subprocess.PIPE)
+    out = proc.communicate()

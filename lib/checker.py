@@ -5,7 +5,7 @@
 
 import time
 
-from lib.shell import disconnectWiFi, connectWiFi, checkIP, checkConnection, doPingAvr, getDBM, getBSSID, getIP
+from lib.shell import disconnectWiFi, connectWiFi, checkIP, checkConnection, doPingAvr, getDBM, getBSSID, getIP, confDefaultGW
 
 def checkSSID(ssid, encrypted, config):
     sanity = {'ssid' : ssid,
@@ -15,32 +15,42 @@ def checkSSID(ssid, encrypted, config):
     'ping_average' : 0,
     'dbm' : 0}
 
+    is_failed = False
+
     time_start = time.time();
     sanity['time_start'] = time_start
 
-    connectWiFi(ssid, config['interface'], encrypted)
+    connectWiFi(ssid, config['wifi_net']['interface'], encrypted)
     while(True):
         if time.time() - time_start > config['checks']['failed']:
+            is_failed = True
             break
 
-        if checkConnection(config['interface']):
+        if checkConnection(config['wifi_net']['interface']):
             break
 
-    if time.time() - time_start < config['checks']['failed']:
+    if not is_failed:
         print("getting IP")
         getIP(config['interface'])
         while(True):
             if time.time() - time_start > config['checks']['failed']:
+                is_failed = True
                 break
 
-            if checkIP():
+            if checkIP(config['checks'][ssid]['gateway']):
+                confDefaultGW(config['wifi_net']['interface'], config['checks']['ssids'][ssid]['gateway'])
                 break
 
     time_end = time.time();
     sanity['time_needed'] = time_end - time_start
 
-    sanity['ping_average'] = doPingAvr(config['checks']['ping_target'], config['interface'], config['checks']['ping_c'])
-    sanity['dbm'] = getDBM(config['interface'])
-    sanity['bssid'] = getBSSID(config['interface'])
+    if is_failed:
+        sanity['ping_average'] = 0
+        sanity['dbm'] = 0
+        sanity['bssid'] = 0
+    else:
+        sanity['ping_average'] = doPingAvr(config['checks']['ping_target'], config['interface'], config['checks']['ping_c'])
+        sanity['dbm'] = getDBM(config['wifi_net']['interface'])
+        sanity['bssid'] = getBSSID(config['wifi_net']['interface'])
 
-    disconnectWiFi(config['interface'])
+    disconnectWiFi(config['wifi_net']['interface'], config['default_net'])
