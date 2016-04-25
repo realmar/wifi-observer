@@ -50,7 +50,7 @@ def checkEntry(db_conn, table, column, search):
 def insertSingle(db_conn, table, column, value):
     c = db_conn.cursor()
 
-    sql_string = 'INSERT INTO ' + table + ' VALUES(' + column + ')' + ' VALUES("' + value + '")'
+    sql_string = 'INSERT INTO ' + table + '(' + column + ')' + ' VALUES("' + value + '")'
 
     try:
         entries = c.execute(sql_string)
