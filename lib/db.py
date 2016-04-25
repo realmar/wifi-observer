@@ -35,7 +35,7 @@ def writeCheck(db_conn, sanity, timeout):
 def checkEntry(db_conn, table, column, search):
     c = db_conn.cursor()
 
-    sql_string = 'SELECT id FROM ' + table + ' WHERE ' + column + '="' + search + '""'
+    sql_string = 'SELECT id FROM ' + table + ' WHERE ' + column + '="' + search + '"'
     try:
         entries = c.execute(sql_string)
     except sqlite3.Error as e:
