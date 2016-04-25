@@ -14,7 +14,7 @@ CREATE TABLE bssids (
 
 CREATE TABLE  data (
   id INTEGER UNSIGNED NOT NULL PRIMARY KEY,
-  time_needed   TIMESTAMP NULL,
+  time_needed   INTEGER UNSIGNED NULL,
   ping_average  TIMESTAMP NULL,
   time_start    TIMESTAMP NOT NULL,
   dbm           INTEGER NULL,
