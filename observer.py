@@ -32,7 +32,7 @@ try:
         for ssid in config['checks']['ssids'].keys():
             sanity = checkSSID(config['checks']['ssids'][ssid]['name'], config['checks']['ssids'][ssid]['encrypted'], config)
 
-            writeCheck(db_connection, sanity)
+            writeCheck(db_connection, sanity, config['checks']['failed'])
             print(sanity)
 
         time.sleep(config['checks']['interval'])
