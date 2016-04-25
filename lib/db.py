@@ -29,6 +29,7 @@ def writeCheck(db_conn, sanity, timeout):
     try:
         entries = c.execute(sql_string)
     except sqlite3.Error as e:
+        print('sql error: ' + e)
         return True
 
 def checkEntry(db_conn, table, column, search):
@@ -38,6 +39,7 @@ def checkEntry(db_conn, table, column, search):
     try:
         entries = c.execute(sql_string)
     except sqlite3.Error as e:
+        print('sql error: ' + e)
         return True
 
     for entry in entries.fetchall():
@@ -53,6 +55,7 @@ def insertSingle(db_conn, table, column, value):
     try:
         entries = c.execute(sql_string)
     except sqlite3.Error as e:
+        print('sql error: ' + e)
         return True
 
     return False
