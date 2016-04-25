@@ -29,8 +29,8 @@ file.close()
 # excecution
 try:
     while(True):
-        for ssid in config['checks']['ssids']:
-            sanity = checkSSID(ssid['name'], ssid['encrypted'], config)
+        for ssid in config['checks']['ssids'].keys():
+            sanity = checkSSID(config['checks']['ssids'][ssid]['name'], config['checks']['ssids'][ssid]['encrypted'], config)
 
             #writeCheck(db_connection, sanity)
             print(sanity)
