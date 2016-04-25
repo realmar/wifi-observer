@@ -30,7 +30,6 @@ def checkSSID(ssid, encrypted, config):
             break
 
     if not is_failed:
-        print("getting IP")
         getIP(config['wifi_net']['interface'])
         while(True):
             if time.time() - time_start > config['checks']['failed']:

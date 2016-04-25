@@ -54,6 +54,9 @@ def doPingAvr(target, interface, count):
     proc = subprocess.Popen(['ping', ''.join(['-c', str(count)]), '-I', interface, target], stdout=subprocess.PIPE)
     out = proc.communicate()
     out = decodeUTF8(out)
+
+    print(out)
+
     try:
         out = out.split(' = ')[1]
         out = out.split(' ms')[0]
