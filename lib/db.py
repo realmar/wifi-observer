@@ -45,7 +45,7 @@ def checkEntry(db_conn, table, column, search):
         return True
 
     for entry in entries.fetchall():
-        return entry
+        return entry[0]
 
     return False
 
