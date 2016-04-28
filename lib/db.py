@@ -25,9 +25,9 @@ def writeCheck(db_conn, sanity, timeouts):
     time_needed_dhcp = 'NULL' if sanity['time_needed_dhcp'] > timeouts['dhcp'] else sanity['time_needed_dhcp']
     ping_average = 'NULL' if sanity['ping_average'] == 0 else str(sanity['ping_average'])
 
-    if time_needed_conn != 'NULL':
+    if not time_needed_conn == 'NULL':
         time_needed_conn = str("{0:.2f}".format(float(time_needed_conn))
-    if time_needed_dhcp != 'NULL':
+    if not time_needed_dhcp == 'NULL':
         time_needed_dhcp = str("{0:.2f}".format(float(time_needed_dhcp))
 
     sql_string = 'INSERT INTO data(time_needed_conn, time_needed_dhcp, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + str(time_needed_conn) + ', ' + str(time_needed_dhcp) + ', ' + str(ping_average) + ', ' + str(int(sanity['time_start'])) + ', ' + str(sanity['dbm']) + ', ' + str(ssid_id) + ', ' + str(bssid_id) + ')'
