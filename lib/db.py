@@ -8,7 +8,7 @@ import sqlite3
 def connectDB(db):
     return sqlite3.connect(db)
 
-def writeCheck(db_conn, sanity, timeout):
+def writeCheck(db_conn, sanity, timeouts):
     bssid_id = sanity['bssid']
     c = db_conn.cursor()
 
@@ -24,8 +24,8 @@ def writeCheck(db_conn, sanity, timeout):
     sanity['time_needed_conn'] = float("{0:.2f}".format(sanity['time_needed_conn']))
     sanity['time_needed_dhcp'] = float("{0:.2f}".format(sanity['time_needed_dhcp']))
 
-    time_needed_conn = 'NULL' if sanity['time_needed_conn'] > timeout else str(sanity['time_needed_conn'])
-    time_needed_dhcp = 'NULL' if sanity['time_needed_dhcp'] > timeout else str(sanity['time_needed_dhcp'])
+    time_needed_conn = 'NULL' if sanity['time_needed_conn'] > timeout['conn'] else str(sanity['time_needed_conn'])
+    time_needed_dhcp = 'NULL' if sanity['time_needed_dhcp'] > timeout['dhcp'] else str(sanity['time_needed_dhcp'])
     ping_average = 'NULL' if sanity['ping_average'] == 0 else str(sanity['ping_average'])
 
     sql_string = 'INSERT INTO data(time_needed_conn, time_needed_dhcp, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + str(time_needed_conn) + ', ' + str(time_needed_dhcp) + ', ' + str(ping_average) + ', ' + str(int(sanity['time_start'])) + ', ' + str(sanity['dbm']) + ', ' + str(ssid_id) + ', ' + str(bssid_id) + ')'
