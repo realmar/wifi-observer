@@ -40,7 +40,8 @@ try:
     while(True):
         processes = []
         for ssid in config['checks']['ssids'].keys():
-            processes.append(Process(target=executeCheck))
+            processes.append(tmp = Process(target=executeCheck))
+            tmp.start()
 
         time.sleep(config['checks']['interval'])
 
