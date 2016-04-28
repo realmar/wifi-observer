@@ -33,7 +33,7 @@ def executeCheck():
     for ssid in config['checks']['ssids'].keys():
         sanity = checkSSID(config['checks']['ssids'][ssid]['name'], config['checks']['ssids'][ssid]['encrypted'], config)
 
-        writeCheck(db_connection, sanity, {'conn' : config['checks']['failed_conn'], 'dhcp' : config['checks']['failed_dhcp'])
+        writeCheck(db_connection, sanity, {'conn' : config['checks']['failed_conn'], 'dhcp' : config['checks']['failed_dhcp']})
         print(sanity)
 
 # excecution
