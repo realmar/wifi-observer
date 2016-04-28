@@ -4,22 +4,22 @@ DROP TABLE IF EXISTS bssids;
 
 CREATE TABLE ssids (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  ssid  VARCHAR(256)
+  ssid  VARCHAR(11)
 );
 
 CREATE TABLE bssids (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  bssid  VARCHAR(256)
+  bssid  VARCHAR(18)
 );
 
 CREATE TABLE  data (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  time_needed   INTEGER UNSIGNED NULL,
-  ping_average  FLOAT NULL,
+  time_needed   FLOAT(7) NULL,
+  ping_average  FLOAT(7) NULL,
   time_start    TIMESTAMP NOT NULL,
-  dbm           INTEGER NULL,
-  ssid_fk       INTEGER UNSIGNED NOT NULL,
-  bssid_fk      INTEGER UNSIGNED NULL,
+  dbm           TINYINT NULL,
+  ssid_fk       TINYINT UNSIGNED NOT NULL,
+  bssid_fk      TINYINT UNSIGNED NULL,
   FOREIGN KEY(ssid_fk) REFERENCES ssids(id),
   FOREIGN KEY(bssid_fk) REFERENCES bssids(id)
 );
