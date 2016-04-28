@@ -30,24 +30,19 @@ db_connection = connectDB(DB)
 
 # functions
 def executeCheck():
-    sanity = checkSSID(config['checks']['ssids'][ssid]['name'], config['checks']['ssids'][ssid]['encrypted'], config)
+    for ssid in config['checks']['ssids'].keys():
+        sanity = checkSSID(config['checks']['ssids'][ssid]['name'], config['checks']['ssids'][ssid]['encrypted'], config)
 
-    writeCheck(db_connection, sanity, config['checks']['failed'])
-    print(sanity)
+        writeCheck(db_connection, sanity, config['checks']['failed'])
+        print(sanity)
 
 # excecution
 try:
     while(True):
-        processes = []
-        for ssid in config['checks']['ssids'].keys():
-            tmp = Process(target=executeCheck)
-            tmp.start()
-            processes.append(tmp)
-
+        proc = Process(target=executeCheck)
+        proc.start()
         time.sleep(config['checks']['interval'])
-
-        for proc in processes:
-            proc.join()
+        proc.join()
 
 except KeyboardInterrupt:
     print('Interrupted by User')
