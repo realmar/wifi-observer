@@ -22,7 +22,7 @@ def writeCheck(db_conn, sanity, timeouts):
     ssid_id = checkEntry(db_conn, 'ssids', 'ssid', sanity['ssid'])
 
     time_needed_conn = 'NULL' if sanity['time_needed_conn'] > timeouts['conn'] else sanity['time_needed_conn']
-    time_needed_dhcp = 'NULL' if sanity['time_needed_dhcp'] > timeouts['dhcp'] else sanity['time_needed_dhcp']
+    time_needed_dhcp = 'NULL' if sanity['time_needed_dhcp'] > timeouts['dhcp'] or time_needed_conn == 'NULL' else sanity['time_needed_dhcp']
     ping_average = 'NULL' if sanity['ping_average'] == 0 else str(sanity['ping_average'])
 
     if time_needed_conn != 'NULL':
