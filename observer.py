@@ -13,6 +13,8 @@ import yaml
 import os
 import time
 
+from multiprocessing import Process
+
 from lib.db import connectDB, writeCheck
 from lib.checker import checkSSID
 
@@ -26,16 +28,24 @@ file.close()
 DB = os.path.join(BASE_DIR, config['database'])
 db_connection = connectDB(DB)
 
+# functions
+def executeCheck():
+    sanity = checkSSID(config['checks']['ssids'][ssid]['name'], config['checks']['ssids'][ssid]['encrypted'], config)
+
+    writeCheck(db_connection, sanity, config['checks']['failed'])
+    print(sanity)
+
 # excecution
 try:
     while(True):
+        processes = []
         for ssid in config['checks']['ssids'].keys():
-            sanity = checkSSID(config['checks']['ssids'][ssid]['name'], config['checks']['ssids'][ssid]['encrypted'], config)
-
-            writeCheck(db_connection, sanity, config['checks']['failed'])
-            print(sanity)
+            processes.append(Process(target=executeCheck))
 
         time.sleep(config['checks']['interval'])
+
+        for proc in processes:
+            proc.join()
 
 except KeyboardInterrupt:
     print('Interrupted by User')

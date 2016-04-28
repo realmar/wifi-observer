@@ -20,5 +20,9 @@ $ sqlite3 wifi-observer.db < wifi-observer.db.sql
 $ vim wifi-observer.conf
   # adapt to your needed
 
+# adapt the BASE_DIR so that it is pointing into the wifi-observer directory
+$ vim observer.py
+  BASE_DIR = '<dir-of-wifi-observer>'
+
 $ python3.4 observer.py   # run observer
 ```
