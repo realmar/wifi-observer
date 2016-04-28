@@ -3,6 +3,7 @@
 
 #!/usr/bin/env python3.4
 
+import subprocess
 from flask import Flask
 app = Flask(__name__)
 
@@ -11,7 +12,10 @@ DATABASE = 'wifi-observer.db'
 
 @app.route("/")
 def hello():
-    return "Hello World"
+    proc = subprocess.Popen(['gnuplot', 'gnuplotfile'], stdout=subprocess.PIPE)
+    proc.communicate()
+
+    return app.send_static_file('wifi.svg')
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')
