@@ -11,7 +11,8 @@ def checkSSID(ssid, encrypted, config):
     sanity = {'ssid' : ssid,
     'bssid' : 0,
     'time_start' : 0,
-    'time_needed' : 0,
+    'time_needed_conn' : 0,
+    'time_needed_dhcp' : 0,
     'ping_average' : 0,
     'dbm' : 0}
 
@@ -22,17 +23,19 @@ def checkSSID(ssid, encrypted, config):
 
     connectWiFi(ssid, config['wifi_net']['interface'], encrypted)
     while(True):
-        if time.time() - time_start > config['checks']['failed']:
+        if time.time() - time_start > config['checks']['failed_conn']:
             is_failed = True
             break
 
         if checkConnection(config['wifi_net']['interface']):
             break
 
+    sanity['time_needed_conn'] = time_end - time_start
+    time_start = time.time();
     if not is_failed:
         getIP(config['wifi_net']['interface'])
         while(True):
-            if time.time() - time_start > config['checks']['failed']:
+            if time.time() - time_start > config['checks']['failed_dhcp']:
                 is_failed = True
                 break
 
@@ -41,7 +44,7 @@ def checkSSID(ssid, encrypted, config):
                 break
 
     time_end = time.time();
-    sanity['time_needed'] = time_end - time_start
+    sanity['time_needed_dhcp'] = time_end - time_start
 
     if is_failed:
         sanity['ping_average'] = 0
