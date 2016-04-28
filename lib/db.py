@@ -24,7 +24,7 @@ def writeCheck(db_conn, sanity, timeout):
     time_needed = 'NULL' if sanity['time_needed'] > timeout else str(int(sanity['time_needed']))
     ping_average = 'NULL' if sanity['ping_average'] == 0 else str(sanity['ping_average'])
 
-    sql_string = 'INSERT INTO data(time_needed, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + str(time_needed) + ', ' + str(ping_average) + ', ' + str(int(sanity['time_start'])) + ', ' + str(sanity['dbm']) + ', ' + str(ssid_id) + ', ' + str(bssid_id) + ')'
+    sql_string = 'INSERT INTO data(time_needed, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + str(float("{0:.2f}".format(time_needed))) + ', ' + str(ping_average) + ', ' + str(int(sanity['time_start'])) + ', ' + str(sanity['dbm']) + ', ' + str(ssid_id) + ', ' + str(bssid_id) + ')'
 
     print(sql_string)
 
