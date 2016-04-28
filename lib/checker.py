@@ -30,6 +30,7 @@ def checkSSID(ssid, encrypted, config):
         if checkConnection(config['wifi_net']['interface']):
             break
 
+    time_end = time.time();
     sanity['time_needed_conn'] = time_end - time_start
     time_start = time.time();
     if not is_failed:
