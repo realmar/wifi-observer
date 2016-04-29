@@ -13,6 +13,7 @@ img.dia_img {
 p {
   height: 0;
   line-height: 0;
+  margin: 0;
 }
 
 h1 {
