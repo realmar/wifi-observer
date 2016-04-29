@@ -92,7 +92,7 @@ def getGlob(db_conn, collumn):
     curr_obj = getAllIDs(db_conn, collumn + 's')
 
     for obj in curr_obj:
-        tmp = []
+        tmp = {}
 
         tmp['type'] = collumn
         tmp['name'] = getAPbyName(db_conn, obj)
@@ -132,7 +132,7 @@ def getSingleStat(db_conn, collumn):
     curr_obj = getAllIDs(db_conn, collumn + 's')
 
     for obj in curr_obj:
-        tmp = []
+        tmp = {}
 
         tmp['type'] = collumn
         tmp['name'] = getAPbyName(db_conn, obj)
