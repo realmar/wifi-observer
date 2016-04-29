@@ -1,6 +1,6 @@
 set datafile separator '|'
 set terminal svg enhanced size 1200,800 fname 'Verdana' fsize 8 enhanced background rgb 'white'
-set output 'wifi.svg'
+set output '/opt/astro-wlan-analyzer/wifi.svg'
 set xlabel "Date"
 set ylabel "Time [s]"
 set timefmt "%s"
