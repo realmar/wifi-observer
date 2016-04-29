@@ -10,8 +10,7 @@ def connectDB(db):
 
 def writeCheck(db_conn, sanity, timeouts):
     bssid_id = sanity['bssid']
-    c = db_conn.cursor()
-
+    
     if bssid_id != 'NULL':
         if(not checkEntry(db_conn, 'bssids', 'bssid', sanity['bssid'])):
             insertSingle(db_conn, 'bssids', 'bssid', sanity['bssid'])
@@ -37,8 +36,6 @@ def writeCheck(db_conn, sanity, timeouts):
     commit(db_conn)
 
 def checkEntry(db_conn, table, column, search):
-    c = db_conn.cursor()
-
     sql_string = 'SELECT id FROM ' + table + ' WHERE ' + column + '="' + search + '"'
     entries = executeSQL(db_conn, sql_string)
 
@@ -50,8 +47,6 @@ def checkEntry(db_conn, table, column, search):
     return False
 
 def insertSingle(db_conn, table, column, value):
-    c = db_conn.cursor()
-
     sql_string = 'INSERT INTO ' + table + '(' + column + ')' + ' VALUES("' + str(value) + '")'
     entries = executeSQL(db_conn, sql_string)
     commit(db_conn)
@@ -60,7 +55,6 @@ def insertSingle(db_conn, table, column, value):
 
 def getUniqueDates(db_path):
     db_conn = connectDB(db_path)
-    c = db_conn.cursor()
 
     ret_val = []
     sql_string = 'SELECT DISTINCT date(time_start, "unixepoch", "localtime") FROM data'
@@ -73,7 +67,6 @@ def getUniqueDates(db_path):
 
 def getGlobStats(db_path):
     db_conn = connectDB(db_path)
-    c = db_conn.cursor()
 
     ret_val = {}
 
@@ -96,7 +89,6 @@ def getGlobStats(db_path):
 
 def getStat(db_path, date):
     db_conn = connectDB(db_path)
-    c = db_conn.cursor()
 
     ret_val = {}
 
@@ -121,6 +113,8 @@ def commit(db_conn):
     db_conn.commit()
 
 def executeSQL(db_conn, sql_string):
+    c = db_conn.cursor()
+
     try:
         entries = c.execute(sql_string)
     except sqlite3.Error as e:
