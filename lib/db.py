@@ -97,17 +97,17 @@ def getGlob(db_conn, collumn):
         tmp['type'] = collumn
         tmp['name'] = getAPbyName(db_conn, collumn, obj)
 
-        sql_string = "SELECT COUNT(id) FROM data WHERE " + collumn + "=" + obj
+        sql_string = "SELECT COUNT(id) FROM data WHERE " + collumn + "=" + str(obj)
         entries = executeSQL(db_conn, sql_string)
         for entry in entries.fetchall():
             tmp['data']['total'] = entry[0]
 
-        sql_string = "SELECT COUNT(id) FROM data WHERE time_needed_conn IS NULL AND " + collumn + "=" + obj
+        sql_string = "SELECT COUNT(id) FROM data WHERE time_needed_conn IS NULL AND " + collumn + "=" + str(obj)
         entries = executeSQL(db_conn, sql_string)
         for entry in entries.fetchall():
             tmp['data']['conn_failed'] = entry[0]
 
-        sql_string = "SELECT COUNT(id) FROM data WHERE time_needed_dhcp IS NULL AND " + collumn + "=" + obj
+        sql_string = "SELECT COUNT(id) FROM data WHERE time_needed_dhcp IS NULL AND " + collumn + "=" + str(obj)
         entries = executeSQL(db_conn, sql_string)
         for entry in entries.fetchall():
             tmp['data']['dhcp_failed'] = entry[0]
@@ -137,17 +137,17 @@ def getSingleStat(db_conn, date, collumn):
         tmp['type'] = collumn
         tmp['name'] = getAPbyName(db_conn, collumn, obj)
 
-        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND ' + collumn + "=" + obj
+        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND ' + collumn + "=" + str(obj)
         entries = executeSQL(db_conn, sql_string)
         for entry in entries.fetchall():
             tmp['data']['total'] = entry[0]
 
-        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_conn IS NULL AND ' + collumn + "=" + obj
+        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_conn IS NULL AND ' + collumn + "=" + str(obj)
         entries = executeSQL(db_conn, sql_string)
         for entry in entries.fetchall():
             tmp['data']['conn_failed'] = entry[0]
 
-        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_dhcp IS NULL AND ' + collumn + "=" + obj
+        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_dhcp IS NULL AND ' + collumn + "=" + str(obj)
         entries = executeSQL(db_conn, sql_string)
         for entry in entries.fetchall():
             tmp['data']['dhcp_failed'] = entry[0]
