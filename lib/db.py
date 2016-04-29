@@ -100,6 +100,7 @@ def getGlob(db_conn, collumn):
         tmp['data'] = {}
 
         sql_string = "SELECT COUNT(id) FROM data WHERE " + collumn + "_fk=" + str(obj)
+        print(sql_string)
         entries = executeSQL(db_conn, sql_string)
         for entry in entries.fetchall():
             tmp['data']['total'] = entry[0]
