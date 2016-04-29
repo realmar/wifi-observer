@@ -95,7 +95,7 @@ def getGlob(db_conn, collumn):
         tmp = {}
 
         tmp['type'] = collumn
-        tmp['name'] = getAPbyName(db_conn, obj)
+        tmp['name'] = getAPbyName(db_conn, collumn, obj)
 
         sql_string = "SELECT COUNT(id) FROM data WHERE " + collumn + "=" + obj
         entries = executeSQL(db_conn, sql_string)
@@ -135,7 +135,7 @@ def getSingleStat(db_conn, collumn):
         tmp = {}
 
         tmp['type'] = collumn
-        tmp['name'] = getAPbyName(db_conn, obj)
+        tmp['name'] = getAPbyName(db_conn, collumn, obj)
 
         sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND ' + collumn + "=" + obj
         entries = executeSQL(db_conn, sql_string)
