@@ -74,5 +74,20 @@ def insertSingle(db_conn, table, column, value):
 
     return False
 
+def getUniqueDates():
+    ret_val = []
+    sql_string = 'SELECT DISTINCT date(time_start, "unixepoch", "localtime") FROM data'
+
+    try:
+        entries = c.execute(sql_string)
+    except sqlite3.Error as e:
+        print('sql error: ' + e)
+        return True
+
+    for entry in entries.fetchall():
+        ret_val.append(entry[0])
+
+    return ret_val
+
 def commit(db_conn):
     db_conn.commit()

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<head>
+
+</head>
+<body>
+  {% for dia in diagrams %}
+    <div class="diagram">
+      <img alt="diagram: {{ dia }}" src="/get/{{ dia }}" />
+    </div>
+  {% endfor %}
+</body>
