@@ -81,7 +81,7 @@ def getGlobStats(db_path):
     return ret_val
 
 def getAPbyName(db_conn, column, id):
-    sql_string = "SELECT " + column + " FROM " + column + "s WHERE id=" + id
+    sql_string = "SELECT " + column + " FROM " + column + "s WHERE id=" + str(id)
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
         return entry[0]
