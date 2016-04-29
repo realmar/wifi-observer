@@ -11,7 +11,11 @@ app = Flask(__name__)
 DATABASE = 'wifi-observer.db'
 
 @app.route("/")
-def hello():
+def home():
+
+
+@app.route("/get/<date>")
+def getSVG():
     proc = subprocess.Popen(['gnuplot', 'gnuplotfile'], stdout=subprocess.PIPE)
     proc.communicate()
 
