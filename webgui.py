@@ -8,7 +8,7 @@ import sys, os
 BASE_DIR = '/opt/astro-wlan-analyzer'
 sys.path.append(BASE_DIR)
 
-from lib.db import getUniqueDates, connectDB
+from lib.db import getUniqueDates, getGlobStats, getStat, connectDB
 
 import subprocess
 import yaml
@@ -26,7 +26,10 @@ DB = os.path.join(BASE_DIR, config['database'])
 
 @app.route("/")
 def home():
-    return render_template('home.html', diagrams=getUniqueDates(DB))
+    diag = getUniqueDates(DB)
+    for dia in diag:
+        dia['stats'] = getStat(DB, dia['date'])
+    return render_template('home.html', diagrams=diag, glob={'stats' : getGlobStats(DB)})
 
 
 @app.route("/get/<date>")
