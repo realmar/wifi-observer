@@ -10,7 +10,7 @@ def connectDB(db):
 
 def writeCheck(db_conn, sanity, timeouts):
     bssid_id = sanity['bssid']
-    
+
     if bssid_id != 'NULL':
         if(not checkEntry(db_conn, 'bssids', 'bssid', sanity['bssid'])):
             insertSingle(db_conn, 'bssids', 'bssid', sanity['bssid'])
