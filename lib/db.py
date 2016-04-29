@@ -74,7 +74,10 @@ def insertSingle(db_conn, table, column, value):
 
     return False
 
-def getUniqueDates():
+def getUniqueDates(db_path):
+    db_conn = connectDB(db_path)
+    c = db_conn.cursor()
+
     ret_val = []
     sql_string = 'SELECT DISTINCT date(time_start, "unixepoch", "localtime") FROM data'
 

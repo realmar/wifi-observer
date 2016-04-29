@@ -8,18 +8,25 @@ import sys, os
 BASE_DIR = '/opt/astro-wlan-analyzer'
 sys.path.append(BASE_DIR)
 
-from lib.db import getUniqueDates
+from lib.db import getUniqueDates, connectDB
 
 import subprocess
-from flask import Flask
+import yaml
+from flask import Flask, render_template
 app = Flask(__name__)
 
 # configuration
-DATABASE = 'wifi-observer.db'
+CONFIG =  os.path.join(BASE_DIR, 'wifi-observer.conf')
+
+file = open(CONFIG, 'r')
+config = yaml.load(file)
+file.close()
+
+DB = os.path.join(BASE_DIR, config['database'])
 
 @app.route("/")
 def home():
-    return render_template('home.html', diagrams=getUniqueDates())
+    return render_template('home.html', diagrams=getUniqueDates(DB))
 
 
 @app.route("/get/<date>")
@@ -36,4 +43,4 @@ def getSVG():
     return app.send_static_file('wifi.svg')
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
