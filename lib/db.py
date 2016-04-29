@@ -71,6 +71,7 @@ def getGlobStats(db_path):
     ret_val = {}
     ret_val['ssids'] = getGlob(db_conn, 'ssid')
     ret_val['bssids'] = getGlob(db_conn, 'bssid')
+    ret_val['total'] = []
     ret_val['total'][0] = {'type' : 'total', 'name' : 'total', 'data' : { 'total' : 0, 'time_needed_conn' : 0, 'time_needed_dhcp' : 0 }}
 
     for stat in ret_val['ssids']:
@@ -165,6 +166,7 @@ def getStat(db_path, date):
     ret_val = {}
     ret_val['ssids'] = getSingleStat(db_conn, date, 'ssid')
     ret_val['bssids'] = getSingleStat(db_conn, date, 'bssid')
+    ret_val['total'] = []
     ret_val['total'][0] = {'type' : 'total', 'name' : 'total', 'data' : { 'total' : 0, 'time_needed_conn' : 0, 'time_needed_dhcp' : 0 }}
 
     for stat in ret_val['ssids']:
