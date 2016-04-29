@@ -69,43 +69,106 @@ def getGlobStats(db_path):
     db_conn = connectDB(db_path)
 
     ret_val = {}
+    ret_val['ssids'] = getGlob(db_conn, 'ssid')
+    ret_val['bssids'] = getGlob(db_conn, 'bssid')
+    ret_val['total'][0]{'type' : 'total', 'name' : 'total', 'data' : { 'total' : 0, 'time_needed_conn' : 0, 'time_needed_dhcp' : 0 }}
 
-    sql_string = "SELECT COUNT(id) FROM data"
-    entries = executeSQL(db_conn, sql_string)
-    for entry in entries.fetchall():
-        ret_val['total'] = entry[0]
-
-    sql_string = "SELECT COUNT(id) FROM data WHERE time_needed_conn IS NULL"
-    entries = executeSQL(db_conn, sql_string)
-    for entry in entries.fetchall():
-        ret_val['conn_failed'] = entry[0]
-
-    sql_string = "SELECT COUNT(id) FROM data WHERE time_needed_dhcp IS NULL"
-    entries = executeSQL(db_conn, sql_string)
-    for entry in entries.fetchall():
-        ret_val['dhcp_failed'] = entry[0]
+    for stat in ret_val['ssids']:
+        ret_val['total'][0]['data']['total'] += stat['data']['total']
+        ret_val['total'][0]['data']['time_needed_conn'] += stat['data']['time_needed_conn']
+        ret_val['total'][0]['data']['time_needed_dhcp'] += stat['data']['time_needed_dhcp']
 
     return ret_val
+
+def getAPbyName(db_conn, column, id):
+    sql_string = "SELECT " + table + " FROM " + table + "s WHERE id=" + id
+    entries = executeSQL(db_conn, sql_string)
+    for entry in entries.fetchall():
+        return entry[0]
+
+def getGlob(db_conn, collumn):
+    ret_val = []
+
+    curr_obj = getAllIDs(db_conn, collumn + 's')
+
+    for obj in curr_obj:
+        tmp = []
+
+        tmp['type'] = collumn
+        tmp['name'] = getAPbyName(db_conn, obj)
+
+        sql_string = "SELECT COUNT(id) FROM data WHERE " + collumn + "=" + obj
+        entries = executeSQL(db_conn, sql_string)
+        for entry in entries.fetchall():
+            tmp['data']['total'] = entry[0]
+
+        sql_string = "SELECT COUNT(id) FROM data WHERE time_needed_conn IS NULL AND " + collumn + "=" + obj
+        entries = executeSQL(db_conn, sql_string)
+        for entry in entries.fetchall():
+            tmp['data']['conn_failed'] = entry[0]
+
+        sql_string = "SELECT COUNT(id) FROM data WHERE time_needed_dhcp IS NULL AND " + collumn + "=" + obj
+        entries = executeSQL(db_conn, sql_string)
+        for entry in entries.fetchall():
+            tmp['data']['dhcp_failed'] = entry[0]
+
+        ret_val.append(tmp)
+
+    return ret_val
+
+def getAllIDs(db_conn, table):
+    ret_val = []
+
+    sql_string = "SELECT id FROM " + table
+    entries = executeSQL(db_conn, sql_string)
+    for entry in entries.fetchall():
+        ret_val.append(entry[0])
+
+    return ret_val
+
+def getSingleStat(db_conn, collumn):
+    ret_val = []
+
+    curr_obj = getAllIDs(db_conn, collumn + 's')
+
+    for obj in curr_obj:
+        tmp = []
+
+        tmp['type'] = collumn
+        tmp['name'] = getAPbyName(db_conn, obj)
+
+        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND ' + collumn + "=" + obj
+        entries = executeSQL(db_conn, sql_string)
+        for entry in entries.fetchall():
+            tmp['data']['total'] = entry[0]
+
+        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_conn IS NULL AND ' + collumn + "=" + obj
+        entries = executeSQL(db_conn, sql_string)
+        for entry in entries.fetchall():
+            tmp['data']['conn_failed'] = entry[0]
+
+        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_dhcp IS NULL AND ' + collumn + "=" + obj
+        entries = executeSQL(db_conn, sql_string)
+        for entry in entries.fetchall():
+            tmp['data']['dhcp_failed'] = entry[0]
+
+        ret_val.append(tmp)
+
+    return ret_val
+
 
 def getStat(db_path, date):
     db_conn = connectDB(db_path)
 
     ret_val = {}
+    ret_val['ssids'] = getSingleStat(db_conn, 'ssid')
+    ret_val['bssids'] = getSingleStat(db_conn, 'bssid')
+    ret_val['total'][0]{'type' : 'total', 'name' : 'total', 'data' : { 'total' : 0, 'time_needed_conn' : 0, 'time_needed_dhcp' : 0 }}
 
-    sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours")'
-    entries = executeSQL(db_conn, sql_string)
-    for entry in entries.fetchall():
-        ret_val['total'] = entry[0]
-
-    sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_conn IS NULL'
-    entries = executeSQL(db_conn, sql_string)
-    for entry in entries.fetchall():
-        ret_val['conn_failed'] = entry[0]
-
-    sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_dhcp IS NULL'
-    entries = executeSQL(db_conn, sql_string)
-    for entry in entries.fetchall():
-        ret_val['dhcp_failed'] = entry[0]
+    for stat in ret_val['ssids']:
+        ret_val['total'][0]['data']['total'] += stat['data']['total']
+        ret_val['total'][0]['data']['time_needed_conn'] += stat['data']['time_needed_conn']
+        ret_val['total'][0]['data']['time_needed_dhcp'] += stat['data']['time_needed_dhcp']
 
     return ret_val
 

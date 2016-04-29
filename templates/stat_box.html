@@ -1,0 +1,6 @@
+{% extends 'parent_stat_box' %}
+{% block checks %}
+  <p class="inline">Total Checks: <b>{{ stat.data.total }}</b></p>
+  <p class="inline">Connection Failed: <b>{{ stat.data.conn_failed }}</b></p>
+  <p class="inline">DHCP Failed: <b>{{ stat.data.dhcp_failed }}</b></p>
+{% endblock %}
