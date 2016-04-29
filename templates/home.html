@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <head>
-
+  <link rel="stylesheet" href="static/base.css" \>
 </head>
 <body>
   {% for dia in diagrams %}
-    <div class="diagram">
-      <img alt="diagram: {{ dia }}" src="/get/{{ dia }}" />
+    <div>
+      <p class="dia_text">{{ dia }}</p>
+      <img class="dia_img" alt="diagram: {{ dia }}" src="/get/{{ dia }}" />
     </div>
   {% endfor %}
 </body>
