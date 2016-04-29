@@ -126,7 +126,7 @@ def getAllIDs(db_conn, table):
 
     return ret_val
 
-def getSingleStat(db_conn, collumn):
+def getSingleStat(db_conn, date, collumn):
     ret_val = []
 
     curr_obj = getAllIDs(db_conn, collumn + 's')
@@ -161,8 +161,8 @@ def getStat(db_path, date):
     db_conn = connectDB(db_path)
 
     ret_val = {}
-    ret_val['ssids'] = getSingleStat(db_conn, 'ssid')
-    ret_val['bssids'] = getSingleStat(db_conn, 'bssid')
+    ret_val['ssids'] = getSingleStat(db_conn, date, 'ssid')
+    ret_val['bssids'] = getSingleStat(db_conn, date, 'bssid')
     ret_val['total'][0] = {'type' : 'total', 'name' : 'total', 'data' : { 'total' : 0, 'time_needed_conn' : 0, 'time_needed_dhcp' : 0 }}
 
     for stat in ret_val['ssids']:
