@@ -92,17 +92,17 @@ def getStat(db_path, date):
 
     ret_val = {}
 
-    sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("2016-04-29", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("2016-04-29", "localtime", "start of day", "+24 hours")'
+    sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours")'
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
         ret_val['total'] = entry[0]
 
-    sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("2016-04-29", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("2016-04-29", "localtime", "start of day", "+24 hours") AND time_needed_conn IS NULL'
+    sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_conn IS NULL'
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
         ret_val['conn_failed'] = entry[0]
 
-    sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("2016-04-29", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("2016-04-29", "localtime", "start of day", "+24 hours") AND time_needed_dhcp IS NULL'
+    sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_dhcp IS NULL'
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
         ret_val['dhcp_failed'] = entry[0]

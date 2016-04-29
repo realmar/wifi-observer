@@ -6,14 +6,15 @@
   <h1>ETH WiFi Observer</h1>
   <h4>I will watch over your wifi connections.</h4>
   <div>
-     <p><b>Global Stats</b></p>
+     <h3><b>Global Stats</b></h3>
      <p class="inline">Total Checks: <b>{{ glob.stats.total }}</b></p>
        <p class="inline">Connection Failed: <b>{{ glob.stats.conn_failed }}</b></p>
      <p class="inline">DHCP Failed: <b>{{ glob.stats.dhcp_failed }}</b></p>
   </div>
+  <hr>
   {% for dia in diagrams %}
     <div>
-      <p class="dia_text">{{ dia }}</p>
+      <p class="dia_text">{{ dia.date }}</p>
       <img class="dia_img" alt="diagram: {{ dia.date }}" src="/get/{{ dia.date }}" />
       <div>
         <p class="inline">Total Checks: <b>{{ dia.stats.total }}</b></p>
@@ -21,5 +22,6 @@
         <p class="inline">DHCP Failed: <b>{{ dia.stats.dhcp_failed }}</b></p>
       </div>
     </div>
+   <hr>
   {% endfor %}
 </body>
