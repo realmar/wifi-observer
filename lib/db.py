@@ -138,6 +138,7 @@ def getSingleStat(db_conn, date, collumn):
         tmp['name'] = getAPbyName(db_conn, collumn, obj)
 
         sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND ' + collumn + "=" + str(obj)
+        print(sql_string)
         entries = executeSQL(db_conn, sql_string)
         for entry in entries.fetchall():
             tmp['data']['total'] = entry[0]
