@@ -169,6 +169,8 @@ def getStat(db_path, date):
     ret_val['total'] = []
     ret_val['total'].append({'type' : 'total', 'name' : 'total', 'data' : { 'total' : 0, 'time_needed_conn' : 0, 'time_needed_dhcp' : 0 }})
 
+    print(ret_val['ssids'])
+
     for stat in ret_val['ssids']:
         ret_val['total'][0]['data']['total'] += stat['data']['total']
         ret_val['total'][0]['data']['time_needed_conn'] += stat['data']['time_needed_conn']
