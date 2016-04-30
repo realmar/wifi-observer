@@ -109,7 +109,7 @@ def getGlob(db_conn, collumn):
         for entry in entries.fetchall():
             tmp['data']['conn_failed'] = entry[0]
 
-        sql_string = "SELECT COUNT(id) FROM data WHERE time_needed_dhcp IS NULL AND " + collumn + "_fk=" + str(obj)
+        sql_string = "SELECT COUNT(id) FROM data WHERE time_needed_dhcp IS NULL AND time_needed_conn IS NOT NULL AND " + collumn + "_fk=" + str(obj)
         entries = executeSQL(db_conn, sql_string)
         for entry in entries.fetchall():
             tmp['data']['dhcp_failed'] = entry[0]
@@ -150,7 +150,7 @@ def getSingleStat(db_conn, date, collumn):
         for entry in entries.fetchall():
             tmp['data']['conn_failed'] = entry[0]
 
-        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_dhcp IS NULL AND ' + collumn + "_fk=" + str(obj)
+        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_dhcp IS NULL AND time_needed_conn IS NOT NULL AND ' + collumn + "_fk=" + str(obj)
         entries = executeSQL(db_conn, sql_string)
         for entry in entries.fetchall():
             tmp['data']['dhcp_failed'] = entry[0]
