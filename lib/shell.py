@@ -42,7 +42,7 @@ def connectWiFi(ssid, interface, wpa):
 
 
 def getIP(interface):
-    proc = subprocess.Popen(['dhclient ' + interface, stdout=subprocess.PIPE, shell=True)
+    proc = subprocess.Popen('dhclient ' + interface, stdout=subprocess.PIPE, shell=True)
     return proc.pid
 
 def killPID(pid):
