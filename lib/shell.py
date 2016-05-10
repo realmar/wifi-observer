@@ -68,8 +68,11 @@ def getDBM(interface):
     proc = subprocess.Popen(['iw', 'dev', interface, 'link'], stdout=subprocess.PIPE)
     out = proc.communicate()
     out = decodeUTF8(out)
-    out = out.split('signal: ')[1]
-    out = out.split(' dBm')[0]
+    try:
+        out = out.split('signal: ')[1]
+        out = out.split(' dBm')[0]
+    except:
+        return 'NULL'
 
     return out
 
