@@ -30,13 +30,14 @@ def connectWiFi(ssid, interface, wpa):
         proc.communicate()
         proc = subprocess.Popen(['wpa_supplicant', '-B', '-i', interface, '-c', ''.join(['/etc/wpa_supplicant-', ssid, '.conf'])], stdout=subprocess.PIPE)
     else:
-        # proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE)
-        # proc.communicate()
-        # proc = subprocess.Popen(['iw', 'dev',  interface, 'scan' ], stdout=subprocess.PIPE, shell=True)
-        # proc.communicate()
-        # proc = subprocess.Popen(['iw', 'dev',  interface, 'connect', ssid ], stdout=subprocess.PIPE, shell=True)
+        proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE)
+        proc.communicate()
+        proc = subprocess.Popen(['iw', 'dev',  interface, 'scan' ], stdout=subprocess.PIPE, shell=True)
+        proc.communicate()
+        proc = subprocess.Popen(['iw', 'dev',  interface, 'connect', ssid ], stdout=subprocess.PIPE, shell=True)
+        out = decodeUTF8(proc.communicate())
+        print(out)
 
-        proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up', '||', 'iw', 'dev',  interface, 'scan', '||', 'iw', 'dev',  interface, 'connect', ssid ], stdout=subprocess.PIPE, shell=True)
 
 def getIP(interface):
     proc = subprocess.Popen(['dhclient', interface], stdout=subprocess.PIPE)
