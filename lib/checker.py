@@ -35,6 +35,7 @@ def checkSSID(ssid, encrypted, config):
     time_start = time.time();
     if not is_failed:
         sanity['bssid'] = getBSSID(config['wifi_net']['interface'])
+        sanity['dbm'] = getDBM(config['wifi_net']['interface'])
         getIP(config['wifi_net']['interface'])
         while(True):
             if time.time() - time_start > config['checks']['failed_dhcp']:
@@ -46,16 +47,15 @@ def checkSSID(ssid, encrypted, config):
                 break
     else:
         sanity['bssid'] = 'NULL'
+        sanity['dbm'] = 'NULL'
 
     time_end = time.time();
     sanity['time_needed_dhcp'] = time_end - time_start
 
     if is_failed:
         sanity['ping_average'] = 0
-        sanity['dbm'] = 'NULL'
     else:
         sanity['ping_average'] = doPingAvr(config['checks']['ping_target'], config['wifi_net']['interface'], config['checks']['ping_c'])
-        sanity['dbm'] = getDBM(config['wifi_net']['interface'])
 
     disconnectWiFi(config['wifi_net']['interface'], config['default_net'])
 
