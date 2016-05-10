@@ -19,13 +19,19 @@ def disconnectWiFi(interface, defaults):
     proc = subprocess.Popen(['iw', 'dev', interface, 'disconnect'], stdout=subprocess.PIPE)
     proc.communicate()
 
+    proc = subprocess.Popen(['ip', 'link', 'set', interface, 'down'], stdout=subprocess.PIPE)
+    proc.communicate()
+
     confDefaultGW(defaults['interface'], defaults['gateway'])
 
 def connectWiFi(ssid, interface, wpa):
     if(wpa):
+        proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE)
+        proc.communicate()
         proc = subprocess.Popen(['wpa_supplicant', '-B', '-i', interface, '-c', ''.join(['/etc/wpa_supplicant-', ssid, '.conf'])], stdout=subprocess.PIPE)
     else:
         proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE)
+        proc.communicate()
         proc = subprocess.Popen(['iw', 'dev',  interface, 'connect', ssid ], stdout=subprocess.PIPE)
 
 def getIP(interface):
