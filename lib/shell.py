@@ -41,7 +41,7 @@ def getIP(interface):
     return proc.pid
 
 def killPID(pid):
-    proc = subprocess.Popen(['kill', '-9',  pid ], stdout=subprocess.PIPE)
+    proc = subprocess.Popen(['kill', '-9',  str(pid) ], stdout=subprocess.PIPE)
     proc.communicate()
 
 def checkIP(gw):
