@@ -5,7 +5,7 @@
 
 import time
 
-from lib.shell import disconnectWiFi, connectWiFi, checkIP, checkConnection, doPingAvr, getDBM, getBSSID, getIP, confDefaultGW
+from lib.shell import disconnectWiFi, connectWiFi, checkIP, checkConnection, doPingAvr, getDBM, getBSSID, getIP, confDefaultGW, killPID
 
 def checkSSID(ssid, encrypted, config):
     sanity = {'ssid' : ssid,
@@ -36,10 +36,11 @@ def checkSSID(ssid, encrypted, config):
     if not is_failed:
         sanity['bssid'] = getBSSID(config['wifi_net']['interface'])
         sanity['dbm'] = getDBM(config['wifi_net']['interface'])
-        getIP(config['wifi_net']['interface'])
+        pid = getIP(config['wifi_net']['interface'])
         while(True):
             if time.time() - time_start > config['checks']['failed_dhcp']:
                 is_failed = True
+                killPID(pid)
                 break
 
             if checkIP(config['checks']['ssids'][ssid]['gateway']):
