@@ -1,5 +1,5 @@
-# Created by: Anastassios Martakos
 # Copyright (c) 2016 Anastassios Martakos
+# Created by: Anastassios Martakos
 
 #!/usr/bin/env python3.4
 
@@ -16,8 +16,9 @@ def disconnectWiFi(interface, defaults):
     proc = subprocess.Popen(['dhclient', '-r', interface], stdout=subprocess.PIPE)
     proc.communicate()
 
-    proc = subprocess.Popen(['iw', 'dev', interface, 'disconnect'], stdout=subprocess.PIPE)
-    proc.communicate()
+    # proc = subprocess.Popen(['iw', 'dev', interface, 'disconnect'],
+    # stdout=subprocess.PIPE)
+    # proc.communicate()
 
     proc = subprocess.Popen(['ip', 'link', 'set', interface, 'down'], stdout=subprocess.PIPE)
     proc.communicate()
