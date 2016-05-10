@@ -16,8 +16,7 @@ def disconnectWiFi(interface, defaults):
     proc = subprocess.Popen(['dhclient', '-r', interface], stdout=subprocess.PIPE)
     proc.communicate()
 
-    # proc = subprocess.Popen(['iw', 'dev', interface, 'disconnect'],
-    # stdout=subprocess.PIPE)
+    # proc = subprocess.Popen(['iw', 'dev', interface, 'disconnect'], stdout=subprocess.PIPE)
     # proc.communicate()
 
     proc = subprocess.Popen(['ip', 'link', 'set', interface, 'down'], stdout=subprocess.PIPE)
@@ -39,7 +38,6 @@ def connectWiFi(ssid, interface, wpa):
 
 def getIP(interface):
     proc = subprocess.Popen(['dhclient', interface], stdout=subprocess.PIPE)
-    out = proc.communicate()
 
 def checkIP(gw):
     proc = subprocess.Popen(['ip', 'a'], stdout=subprocess.PIPE)
