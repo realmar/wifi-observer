@@ -53,128 +53,19 @@ def insertSingle(db_conn, table, column, value):
 
     return False
 
-def getUniqueDates(db_path):
-    db_conn = connectDB(db_path)
-
-    ret_val = []
-    sql_string = 'SELECT DISTINCT date(time_start, "unixepoch", "localtime") FROM data'
-    entries = executeSQL(db_conn, sql_string)
-
-    for entry in entries.fetchall():
-        ret_val.append({'date' : entry[0]})
-
-    return ret_val
-
-def getGlobStats(db_path):
-    db_conn = connectDB(db_path)
-
-    ret_val = {}
-    ret_val['ssids'] = getGlob(db_conn, 'ssid')
-    ret_val['bssids'] = getGlob(db_conn, 'bssid')
-    ret_val['total'] = []
-    ret_val['total'].append({'type' : 'total', 'name' : 'total', 'data' : { 'total' : 0, 'conn_failed' : 0, 'dhcp_failed' : 0 }})
-
-    for stat in ret_val['ssids']:
-        ret_val['total'][0]['data']['total'] += stat['data']['total']
-        ret_val['total'][0]['data']['conn_failed'] += stat['data']['conn_failed']
-        ret_val['total'][0]['data']['dhcp_failed'] += stat['data']['dhcp_failed']
-
-    return ret_val
-
 def getAPbyName(db_conn, column, id):
     sql_string = "SELECT " + column + " FROM " + column + "s WHERE id=" + str(id)
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
         return entry[0]
 
-def getGlob(db_conn, collumn):
-    ret_val = []
-
-    curr_obj = getAllIDs(db_conn, collumn + 's')
-
-    for obj in curr_obj:
-        tmp = {}
-
-        tmp['type'] = collumn
-        tmp['name'] = getAPbyName(db_conn, collumn, obj)
-        tmp['data'] = {}
-
-        sql_string = "SELECT COUNT(id) FROM data WHERE " + collumn + "_fk=" + str(obj)
-        entries = executeSQL(db_conn, sql_string)
-        for entry in entries.fetchall():
-            tmp['data']['total'] = entry[0]
-
-        sql_string = "SELECT COUNT(id) FROM data WHERE time_needed_conn IS NULL AND " + collumn + "_fk=" + str(obj)
-        entries = executeSQL(db_conn, sql_string)
-        for entry in entries.fetchall():
-            tmp['data']['conn_failed'] = entry[0]
-
-        sql_string = "SELECT COUNT(id) FROM data WHERE time_needed_dhcp IS NULL AND time_needed_conn IS NOT NULL AND " + collumn + "_fk=" + str(obj)
-        entries = executeSQL(db_conn, sql_string)
-        for entry in entries.fetchall():
-            tmp['data']['dhcp_failed'] = entry[0]
-
-        ret_val.append(tmp)
-
-    return ret_val
-
-def getAllIDs(db_conn, table):
-    ret_val = []
-
-    sql_string = "SELECT id FROM " + table
+def getStats(db_conn):
+    sql_string = 'select date(time_start, "unixepoch", "localtime", "start of day") as time_start_coll , ssid_fk,bssid_fk,count(id),time_needed_dhcp IS NULL as time_needed_dhcp_null,time_needed_conn IS NULL as time_needed_conn_null from data group by ssid_fk,bssid_fk, time_needed_dhcp IS NULL, time_needed_conn IS NULL, date(time_start, "unixepoch", "localtime", "start of day")'
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
-        ret_val.append(entry[0])
+        print(entry)
 
-    return ret_val
-
-def getSingleStat(db_conn, date, collumn):
-    ret_val = []
-
-    curr_obj = getAllIDs(db_conn, collumn + 's')
-
-    for obj in curr_obj:
-        tmp = {}
-
-        tmp['type'] = collumn
-        tmp['name'] = getAPbyName(db_conn, collumn, obj)
-        tmp['data'] = {}
-
-        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND ' + collumn + "_fk=" + str(obj)
-        entries = executeSQL(db_conn, sql_string)
-        for entry in entries.fetchall():
-            tmp['data']['total'] = entry[0]
-
-        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_conn IS NULL AND ' + collumn + "_fk=" + str(obj)
-        entries = executeSQL(db_conn, sql_string)
-        for entry in entries.fetchall():
-            tmp['data']['conn_failed'] = entry[0]
-
-        sql_string = 'SELECT COUNT(id) FROM data WHERE datetime(time_start, "unixepoch", "localtime") > datetime("' + date + '", "localtime", "start of day") AND datetime(time_start, "unixepoch", "localtime") < datetime("' + date + '", "localtime", "start of day", "+24 hours") AND time_needed_dhcp IS NULL AND time_needed_conn IS NOT NULL AND ' + collumn + "_fk=" + str(obj)
-        entries = executeSQL(db_conn, sql_string)
-        for entry in entries.fetchall():
-            tmp['data']['dhcp_failed'] = entry[0]
-
-        ret_val.append(tmp)
-
-    return ret_val
-
-
-def getStat(db_path, date):
-    db_conn = connectDB(db_path)
-
-    ret_val = {}
-    ret_val['ssids'] = getSingleStat(db_conn, date, 'ssid')
-    ret_val['bssids'] = getSingleStat(db_conn, date, 'bssid')
-    ret_val['total'] = []
-    ret_val['total'].append({'type' : 'total', 'name' : 'total', 'data' : { 'total' : 0, 'conn_failed' : 0, 'dhcp_failed' : 0 }})
-
-    for stat in ret_val['ssids']:
-        ret_val['total'][0]['data']['total'] += stat['data']['total']
-        ret_val['total'][0]['data']['conn_failed'] += stat['data']['conn_failed']
-        ret_val['total'][0]['data']['dhcp_failed'] += stat['data']['dhcp_failed']
-
-    return ret_val
+    return {}
 
 def commit(db_conn):
     db_conn.commit()
