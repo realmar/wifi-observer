@@ -117,8 +117,10 @@ def getStats(db_path):
 
             if(type == 'ssid'):
                 name = getAPbyName(db_conn, type, entry[SSID])
-            elif(type == 'bssid'):
+            elif(type == 'bssid' and entry[BSSID] != None):
                 name = getAPbyName(db_conn, type, entry[BSSID])
+            elif(type == 'bssid' and entry[BSSID] == None):
+                name = "no connection"
 
             try: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]
             except: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name] = {}
