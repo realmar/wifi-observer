@@ -24,13 +24,10 @@ file.close()
 
 DB = os.path.join(BASE_DIR, config['database'])
 
-def calculateGlobalStats(stats):
-    return {}
-
 @app.route("/")
 def home():
     stats = getStats(DB)
-    return render_template('home.html', diagrams=stats, glob={'stats' : calculateGlobalStats(stats)})
+    return render_template('home.html', diagrams=stats[0], glob=stats[1])
 
 
 @app.route("/get/<date>")

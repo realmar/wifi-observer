@@ -1,12 +1,12 @@
 {% extends 'parent_stat_box.html' %}
 {% block checks %}
-  <p class="inline">Total checks: <b>{{ stat.data.total }}</b></p>
+  <p class="inline">Total checks: <b>{{ stat.total_checks }}</b></p>
   <p class="inline">Connection failed: <b>
-	{{ stat.data.conn_failed }}
-	{% if (stat.data.total) %} ({{  (stat.data.conn_failed/stat.data.total*100)|round(1, 'common') }}%) {% endif %}
+	{{ stat.conn_null_count }}
+	{% if (stat.total_checks) %} ({{  (stat.conn_null_count/stat.total_checks*100)|round(1, 'common') }}%) {% endif %}
 	</b></p>
   <p class="inline">DHCP failed: <b>
-	{{ stat.data.dhcp_failed }}
-	{% if (stat.data.total) %} ({{  (stat.data.dhcp_failed/stat.data.total*100)|round(1, 'common') }}%) {% endif %}
+	{{ stat.dhcp_null_count }}
+	{% if (stat.total_checks) %} ({{  (stat.dhcp_null_count/stat.total_checks*100)|round(1, 'common') }}%) {% endif %}
 	</b></p>
 {% endblock %}

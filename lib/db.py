@@ -64,12 +64,72 @@ def getAPbyName(db_path, column, id):
 def getStats(db_path):
     db_conn = connectDB(db_path)
 
+    DATE = 0
+    SSID = 1
+    BSSID = 2
+    ID_COUNT = 3
+    DHCP_NULL = 4
+    CONN_NULL = 5
+
+    # stats data structure
+    # { <date> :    { <type> : { <name> {
+    #                                       <total_checks> : <int>
+    #                                       <conn_null_count> : <int>
+    #                                       <dhcp_null_count : <int>
+    #                                   }
+    #                           }
+    #               }
+    # }
+    #
+    # type can be:  total
+    #               ssid
+    #               bssid
+
+    stats = {}
+
+    # glob stat data structure is the same as stats
+    # just without the <date>
+
+    glob_stats = {}
+
+    types = [ 'ssid', 'bssid' ]
+
     sql_string = 'select date(time_start, "unixepoch", "localtime", "start of day") as time_start_coll , ssid_fk,bssid_fk,count(id),time_needed_dhcp IS NULL as time_needed_dhcp_null,time_needed_conn IS NULL as time_needed_conn_null from data group by ssid_fk,bssid_fk, time_needed_dhcp IS NULL, time_needed_conn IS NULL, date(time_start, "unixepoch", "localtime", "start of day")'
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
-        print(entry)
+        for type in types:
+            try: stats[entry[DATE]]
+            except: stats[entry[DATE]] = {}
 
-    return {}
+            try: stats[entry[DATE]][type]
+            except: stats[entry[DATE]][type] = {}
+
+            name = getAPbyName(entry[SSID])
+            try: stats[entry[DATE]][type][name]['total_checks']
+            except: stats[entry[DATE]][type][name]['total_checks'] = 0
+            stats[entry[DATE]][type][name]['total_checks'] += entry[ID_COUNT]
+            try: stats[entry[DATE]][type][name]['conn_null_count']
+            except: stats[entry[DATE]][type][name]['conn_null_count'] = 0
+            try: stats[entry[DATE]][type][name]['dhcp_null_count']
+            except: stats[entry[DATE]][type][name]['dhcp_null_count'] = 0
+            stats[entry[DATE]][type][name]['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
+            stats[entry[DATE]][type][name]['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 else 0
+
+            stats[entry[DATE]][type].append(tmp)
+
+        try: stats[entry[DATE]]['total']
+        except: stats[entry[DATE]]['total'] = {}
+        try: stats[entry[DATE]][type]['total']['total_checks']
+        except: stats[entry[DATE]][type]['total']['total_checks'] = 0
+        stats[entry[DATE]][type]['total']['total_checks'] += entry[ID_COUNT]
+        try: stats[entry[DATE]][type]['total']['conn_null_count']
+        except: stats[entry[DATE]][type]['total']['conn_null_count'] = 0
+        try: stats[entry[DATE]][type]['total']['dhcp_null_count']
+        except: stats[entry[DATE]][type]['total']['dhcp_null_count'] = 0
+        stats[entry[DATE]][type]['total']['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
+        stats[entry[DATE]][type]['total']['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 else 0
+
+    return [glob_stats, stats]
 
 def commit(db_conn):
     db_conn.commit()
