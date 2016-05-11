@@ -141,7 +141,7 @@ def getStats(db_path):
             glob_stats[type]['total']['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
             glob_stats[type]['total']['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 else 0
 
-    return [glob_stats, stats]
+    return [stats, glob_stats]
 
 def commit(db_conn):
     db_conn.commit()
