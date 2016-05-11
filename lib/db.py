@@ -70,14 +70,14 @@ def getStats(db_path):
     CONN_NULL = 5
 
     # stats data structure
-    # { <date> :    { <type> : { <name> {
+    # [ { <date> :    { <type> : { <name> {
     #                                       <total_checks> : <int>
     #                                       <conn_null_count> : <int>
     #                                       <dhcp_null_count : <int>
     #                                   }
     #                           }
     #               }
-    # }
+    # ] }
     #
     # type can be:  total
     #               ssid
@@ -86,9 +86,16 @@ def getStats(db_path):
     stats = {}
 
     # glob stat data structure is the same as stats
-    # just without the <date>
+    # just without the <date> and the array arround it
 
     glob_stats = {}
+
+    # date_mapper data structure
+    # {
+    #   <date> : <(int)array-index>
+    # }
+
+    date_mapper {}
 
     types = [ 'ssid', 'bssid' ]
 
@@ -96,38 +103,44 @@ def getStats(db_path):
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
         for type in types:
-            try: stats[entry[DATE]]
-            except: stats[entry[DATE]] = {}
+            try: date_mapper[entry[DATE]]
+            except:
+                stats.append({})
+                date_mapper[entry[DATE]] = len(stats) - 1
 
-            try: stats[entry[DATE]][type]
-            except: stats[entry[DATE]][type] = {}
+
+            try: stats[date_mapper[entry[DATE]]][entry[DATE]]
+            except: stats[date_mapper[entry[DATE]]][entry[DATE]] = {}
+
+            try: stats[date_mapper[entry[DATE]]][entry[DATE]][type]
+            except: stats[date_mapper[entry[DATE]]][entry[DATE]][type] = {}
 
             name = getAPbyName(db_conn, type, entry[SSID])
-            try: stats[entry[DATE]][type][name]
-            except: stats[entry[DATE]][type][name] = {}
-            try: stats[entry[DATE]][type][name]['total_checks']
-            except: stats[entry[DATE]][type][name]['total_checks'] = 0
-            stats[entry[DATE]][type][name]['total_checks'] += entry[ID_COUNT]
-            try: stats[entry[DATE]][type][name]['conn_null_count']
-            except: stats[entry[DATE]][type][name]['conn_null_count'] = 0
-            try: stats[entry[DATE]][type][name]['dhcp_null_count']
-            except: stats[entry[DATE]][type][name]['dhcp_null_count'] = 0
-            stats[entry[DATE]][type][name]['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
-            stats[entry[DATE]][type][name]['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 else 0
+            try: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]
+            except: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name] = {}
+            try: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]['total_checks']
+            except: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]['total_checks'] = 0
+            stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]['total_checks'] += entry[ID_COUNT]
+            try: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]['conn_null_count']
+            except: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]['conn_null_count'] = 0
+            try: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]['dhcp_null_count']
+            except: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]['dhcp_null_count'] = 0
+            stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
+            stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 else 0
 
-            try: stats[entry[DATE]]['total']
-            except: stats[entry[DATE]]['total'] = {}
-            try: stats[entry[DATE]]['total']['total']
-            except: stats[entry[DATE]]['total']['total'] = {}
-            try: stats[entry[DATE]]['total']['total']['total_checks']
-            except: stats[entry[DATE]]['total']['total']['total_checks'] = 0
-            stats[entry[DATE]]['total']['total']['total_checks'] += entry[ID_COUNT]
-            try: stats[entry[DATE]]['total']['total']['conn_null_count']
+            try: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']
+            except: stats[date_mapper[entry[DATE]]][entry[DATE]]['total'] = {}
+            try: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']
+            except: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total'] = {}
+            try: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['total_checks']
+            except: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['total_checks'] = 0
+            stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['total_checks'] += entry[ID_COUNT]
+            try: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['conn_null_count']
             except: stats[entry[DATE]]['total']['total']['conn_null_count'] = 0
-            try: stats[entry[DATE]]['total']['total']['dhcp_null_count']
-            except: stats[entry[DATE]]['total']['total']['dhcp_null_count'] = 0
-            stats[entry[DATE]]['total']['total']['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
-            stats[entry[DATE]]['total']['total']['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 else 0
+            try: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['dhcp_null_count']
+            except: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['dhcp_null_count'] = 0
+            stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
+            stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 else 0
 
             try: glob_stats[type]
             except: glob_stats[type] = {}
