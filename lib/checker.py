@@ -34,6 +34,9 @@ def checkSSID(ssid, encrypted, config):
 
     time_end = time.time();
     sanity['time_needed_conn'] = time_end - time_start
+
+    time.sleep(4)
+
     time_start = time.time();
     if not is_failed:
         sanity['bssid'] = getBSSID(config['wifi_net']['interface'])
