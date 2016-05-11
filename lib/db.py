@@ -135,7 +135,7 @@ def getStats(db_path):
             except: glob_stats[type]['total']['total_checks'] = 0
             glob_stats[type]['total']['total_checks'] += entry[ID_COUNT]
             try: glob_stats[type]['total']['conn_null_count']
-            except: glob_stats][type]['total']['conn_null_count'] = 0
+            except: glob_stats[type]['total']['conn_null_count'] = 0
             try: glob_stats[type]['total']['dhcp_null_count']
             except: glob_stats[type]['total']['dhcp_null_count'] = 0
             glob_stats[type]['total']['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
