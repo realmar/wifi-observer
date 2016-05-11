@@ -18,6 +18,8 @@ def checkSSID(ssid, encrypted, config):
 
     is_failed = False
 
+    initializeInterface(config['wifi_net']['interface'])
+
     time_start = time.time();
     sanity['time_start'] = time_start
 

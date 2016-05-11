@@ -6,6 +6,7 @@
 import subprocess
 
 from lib.utils import decodeUTF8
+from time import sleep
 
 def disconnectWiFi(interface, defaults):
     proc = subprocess.Popen(['killall', 'wpa_supplicant'], stdout=subprocess.PIPE)
@@ -26,20 +27,20 @@ def disconnectWiFi(interface, defaults):
 
 def connectWiFi(ssid, interface, wpa):
     if(wpa):
-        proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE)
-        proc.communicate()
         proc = subprocess.Popen(['wpa_supplicant', '-B', '-i', interface, '-c', ''.join(['/etc/wpa_supplicant-', ssid, '.conf'])], stdout=subprocess.PIPE)
     else:
-        proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE)
-        proc.communicate()
-        proc = subprocess.Popen(['iw', 'dev',  interface, 'scan' ], stdout=subprocess.PIPE)
-        proc.communicate()
         proc = subprocess.Popen(['iw', 'dev',  interface, 'connect', ssid ], stdout=subprocess.PIPE)
         # out = decodeUTF8(proc.communicate())
         # print(out)
 
         # proc = subprocess.Popen('ip link set ' + interface + ' up && ' + 'iw dev ' + interface + ' scan && ' + 'iw dev ' + interface + ' connect ' + ssid, stdout=subprocess.PIPE, shell=True)
 
+def initializeInterface(interface):
+    proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE)
+    proc.communicate()
+    sleep(4)
+    proc = subprocess.Popen(['iw', 'dev',  interface, 'scan' ], stdout=subprocess.PIPE)
+    proc.communicate()
 
 def getIP(interface):
     proc = subprocess.Popen(['dhclient', interface], stdout=subprocess.PIPE)
