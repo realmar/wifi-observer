@@ -8,7 +8,7 @@ import sys, os
 BASE_DIR = '/opt/astro-wlan-analyzer'
 sys.path.append(BASE_DIR)
 
-from lib.db import getStats, connectDB
+from lib.db import getStats
 
 import subprocess
 import yaml

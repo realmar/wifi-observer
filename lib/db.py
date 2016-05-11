@@ -53,7 +53,9 @@ def insertSingle(db_conn, table, column, value):
 
     return False
 
-def getAPbyName(db_conn, column, id):
+def getAPbyName(db_path, column, id):
+    db_conn = connectDB(db_path)
+
     sql_string = "SELECT " + column + " FROM " + column + "s WHERE id=" + str(id)
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
