@@ -115,8 +115,8 @@ def getStats(db_path):
             stats[entry[DATE]][type][name]['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
             stats[entry[DATE]][type][name]['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 else 0
 
-            try: stats[entry[DATE]]['total']
-            except: stats[entry[DATE]]['total'] = {}
+            try: stats[entry[DATE]][type]['total']
+            except: stats[entry[DATE]][type]['total'] = {}
             try: stats[entry[DATE]][type]['total']['total_checks']
             except: stats[entry[DATE]][type]['total']['total_checks'] = 0
             stats[entry[DATE]][type]['total']['total_checks'] += entry[ID_COUNT]
