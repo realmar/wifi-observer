@@ -83,7 +83,7 @@ def getStats(db_path):
     #               ssid
     #               bssid
 
-    stats = {}
+    stats = []
 
     # glob stat data structure is the same as stats
     # just without the <date> and the array arround it
