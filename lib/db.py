@@ -61,7 +61,9 @@ def getAPbyName(db_path, column, id):
     for entry in entries.fetchall():
         return entry[0]
 
-def getStats(db_conn):
+def getStats(db_path):
+    db_conn = connectDB(db_path)
+
     sql_string = 'select date(time_start, "unixepoch", "localtime", "start of day") as time_start_coll , ssid_fk,bssid_fk,count(id),time_needed_dhcp IS NULL as time_needed_dhcp_null,time_needed_conn IS NULL as time_needed_conn_null from data group by ssid_fk,bssid_fk, time_needed_dhcp IS NULL, time_needed_conn IS NULL, date(time_start, "unixepoch", "localtime", "start of day")'
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
