@@ -103,6 +103,8 @@ def getStats(db_path):
             except: stats[entry[DATE]][type] = {}
 
             name = getAPbyName(db_conn, type, entry[SSID])
+            try: stats[entry[DATE]][type][name]
+            except: stats[entry[DATE]][type][name] = {}
             try: stats[entry[DATE]][type][name]['total_checks']
             except: stats[entry[DATE]][type][name]['total_checks'] = 0
             stats[entry[DATE]][type][name]['total_checks'] += entry[ID_COUNT]
@@ -113,19 +115,31 @@ def getStats(db_path):
             stats[entry[DATE]][type][name]['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
             stats[entry[DATE]][type][name]['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 else 0
 
-            stats[entry[DATE]][type].append(tmp)
+            try: stats[entry[DATE]]['total']
+            except: stats[entry[DATE]]['total'] = {}
+            try: stats[entry[DATE]][type]['total']['total_checks']
+            except: stats[entry[DATE]][type]['total']['total_checks'] = 0
+            stats[entry[DATE]][type]['total']['total_checks'] += entry[ID_COUNT]
+            try: stats[entry[DATE]][type]['total']['conn_null_count']
+            except: stats[entry[DATE]][type]['total']['conn_null_count'] = 0
+            try: stats[entry[DATE]][type]['total']['dhcp_null_count']
+            except: stats[entry[DATE]][type]['total']['dhcp_null_count'] = 0
+            stats[entry[DATE]][type]['total']['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
+            stats[entry[DATE]][type]['total']['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 else 0
 
-        try: stats[entry[DATE]]['total']
-        except: stats[entry[DATE]]['total'] = {}
-        try: stats[entry[DATE]][type]['total']['total_checks']
-        except: stats[entry[DATE]][type]['total']['total_checks'] = 0
-        stats[entry[DATE]][type]['total']['total_checks'] += entry[ID_COUNT]
-        try: stats[entry[DATE]][type]['total']['conn_null_count']
-        except: stats[entry[DATE]][type]['total']['conn_null_count'] = 0
-        try: stats[entry[DATE]][type]['total']['dhcp_null_count']
-        except: stats[entry[DATE]][type]['total']['dhcp_null_count'] = 0
-        stats[entry[DATE]][type]['total']['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
-        stats[entry[DATE]][type]['total']['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 else 0
+            try: glob_stats[type]
+            except: glob_stats[type] = {}
+            try: glob_stats[type]['total']
+            except: glob_stats[type]['total'] = {}
+            try: glob_stats[type]['total']['total_checks']
+            except: glob_stats[type]['total']['total_checks'] = 0
+            glob_stats[type]['total']['total_checks'] += entry[ID_COUNT]
+            try: glob_stats[type]['total']['conn_null_count']
+            except: glob_stats][type]['total']['conn_null_count'] = 0
+            try: glob_stats[type]['total']['dhcp_null_count']
+            except: glob_stats[type]['total']['dhcp_null_count'] = 0
+            glob_stats[type]['total']['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
+            glob_stats[type]['total']['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 else 0
 
     return [glob_stats, stats]
 
