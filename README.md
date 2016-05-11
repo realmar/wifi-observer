@@ -25,4 +25,9 @@ $ vim observer.py
   BASE_DIR = '<dir-of-wifi-observer>'
 
 $ python3.4 observer.py   # run observer
+
+# install cronjob
+# this cronjob generates the plots every 2nd minute
+$ crontab -e
+*/2 * * * * /usr/bin/python3.4 /opt/astro-wlan-analyzer/image-cache.py
 ```

@@ -53,6 +53,14 @@ def insertSingle(db_conn, table, column, value):
 
     return False
 
+def getAllDates(db_path):
+    db_conn = connectDB(db_path)
+
+    sql_string = 'SELECT DISTINCT date(time_start, "unixepoch", "localtime", "start of day") FROM data'
+    entries = executeSQL(db_conn, sql_string)
+    return entries.fetchall()
+
+
 def getAPbyName(db_conn, column, id):
     sql_string = "SELECT " + column + " FROM " + column + "s WHERE id=" + str(id)
     entries = executeSQL(db_conn, sql_string)

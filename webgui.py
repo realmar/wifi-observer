@@ -32,16 +32,7 @@ def home():
 
 @app.route("/get/<date>")
 def getSVG(date):
-    proc = subprocess.Popen(['mkdir', os.path.join(BASE_DIR, 'tmp')], stdout=subprocess.PIPE)
-    proc.communicate()
-    proc = subprocess.Popen(['cp', '-r', os.path.join(BASE_DIR, 'gnuplotfile'), os.path.join(BASE_DIR, 'tmp/gnuplotfile')], stdout=subprocess.PIPE)
-    proc.communicate()
-    proc = subprocess.Popen(['sed', '-i', ''.join(['s/<date>/', date, '/g']), os.path.join(BASE_DIR, 'tmp/gnuplotfile')], stdout=subprocess.PIPE)
-    proc.communicate()
-    proc = subprocess.Popen(['gnuplot', os.path.join(BASE_DIR, 'tmp/gnuplotfile')], stdout=subprocess.PIPE)
-    proc.communicate()
-
-    return app.send_static_file('wifi.svg')
+    return app.send_static_file(date + '.svg')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
