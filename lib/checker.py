@@ -5,7 +5,7 @@
 
 import time
 
-from lib.shell import disconnectWiFi, connectWiFi, checkIP, checkConnection, doPingAvr, getDBM, getBSSID, getIP, confDefaultGW, killPID
+from lib.shell import disconnectWiFi, connectWiFi, checkIP, checkConnection, doPingAvr, getDBM, getBSSID, getIP, confDefaultGW, killPID,initializeInterface
 
 def checkSSID(ssid, encrypted, config):
     sanity = {'ssid' : ssid,
