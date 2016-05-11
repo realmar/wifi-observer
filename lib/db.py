@@ -95,7 +95,7 @@ def getStats(db_path):
     #   <date> : <(int)array-index>
     # }
 
-    date_mapper {}
+    date_mapper = {}
 
     types = [ 'ssid', 'bssid' ]
 
