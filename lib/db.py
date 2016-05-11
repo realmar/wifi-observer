@@ -115,7 +115,11 @@ def getStats(db_path):
             try: stats[date_mapper[entry[DATE]]][entry[DATE]][type]
             except: stats[date_mapper[entry[DATE]]][entry[DATE]][type] = {}
 
-            name = getAPbyName(db_conn, type, entry[SSID])
+            if(type == 'ssid')
+                name = getAPbyName(db_conn, type, entry[SSID])
+            else if(type == 'bssid'):
+                name = getAPbyName(db_conn, type, entry[BSSID])
+
             try: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]
             except: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name] = {}
             try: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]['total_checks']
