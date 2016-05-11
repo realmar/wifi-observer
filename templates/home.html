@@ -15,34 +15,34 @@
   <div>
      <h3><b>Global Stats</b></h3>
      <h4>Total</h4>
-     {% for name,stat in glob.total %}
+     {% for name,stat in glob.total.items %}
        {% include 'stat_box.html' %}
      {% endfor %}
      <h4>SSIDs</h4>
-     {% for name,stat in glob.ssids %}
+     {% for name,stat in glob.ssids.items %}
        {% include 'stat_box.html' %}
      {% endfor %}
      <h4>BSSIDs</h4>
-     {% for name,stat in glob.bssids %}
+     {% for name,stat in glob.bssids.items %}
        {% include 'stat_box.html' %}
      {% endfor %}
   </div>
   <hr>
-  {% for date,value in diagrams %}
+  {% for date,value in diagrams.items %}
     <div>
       <p class="dia_text">{{ date }}</p>
       <img class="dia_img" alt="diagram: {{ date }}" src="/get/{{ date }}" />
       <div>
         <h4>Total</h4>
-        {% for name,stat in value.total %}
+        {% for name,stat in value.total.items %}
           {% include 'stat_box.html' %}
         {% endfor %}
         <h4>SSIDs</h4>
-        {% for name,stat in value.ssid %}
+        {% for name,stat in value.ssid.items %}
           {% include 'stat_box.html' %}
         {% endfor %}
         <h4>BSSIDs</h4>
-        {% for name,stat in value.bssid %}
+        {% for name,stat in value.bssid.items %}
           {% include 'stat_box.html' %}
         {% endfor %}
       </div>
