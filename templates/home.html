@@ -28,7 +28,7 @@
      {% endfor %}
   </div>
   <hr>
-  {% for date,value in diagrams.items %}
+  {% for date,value in diagrams.items() %}
     <div>
       <p class="dia_text">{{ date }}</p>
       <img class="dia_img" alt="diagram: {{ date }}" src="/get/{{ date }}" />
