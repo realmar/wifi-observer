@@ -136,7 +136,7 @@ def getStats(db_path):
             except: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['total_checks'] = 0
             stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['total_checks'] += entry[ID_COUNT]
             try: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['conn_null_count']
-            except: stats[entry[DATE]]['total']['total']['conn_null_count'] = 0
+            except: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['conn_null_count'] = 0
             try: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['dhcp_null_count']
             except: stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['dhcp_null_count'] = 0
             stats[date_mapper[entry[DATE]]][entry[DATE]]['total']['total']['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
