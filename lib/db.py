@@ -53,9 +53,7 @@ def insertSingle(db_conn, table, column, value):
 
     return False
 
-def getAPbyName(db_path, column, id):
-    db_conn = connectDB(db_path)
-
+def getAPbyName(db_conn, column, id):
     sql_string = "SELECT " + column + " FROM " + column + "s WHERE id=" + str(id)
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
@@ -104,7 +102,7 @@ def getStats(db_path):
             try: stats[entry[DATE]][type]
             except: stats[entry[DATE]][type] = {}
 
-            name = getAPbyName(entry[SSID])
+            name = getAPbyName(db_conn, type, entry[SSID])
             try: stats[entry[DATE]][type][name]['total_checks']
             except: stats[entry[DATE]][type][name]['total_checks'] = 0
             stats[entry[DATE]][type][name]['total_checks'] += entry[ID_COUNT]
