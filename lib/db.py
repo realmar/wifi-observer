@@ -123,7 +123,7 @@ def getStats(db_path):
             elif(type == 'bssid' and entry[BSSID] != None):
                 name = entry[BSSID_NAME]
             elif(type == 'bssid' and entry[BSSID] == None):
-                break
+                name = "no connection"
 
             try: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name]
             except: stats[date_mapper[entry[DATE]]][entry[DATE]][type][name] = {}
