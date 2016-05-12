@@ -16,6 +16,8 @@ this data with *ssid*, *bssid* and *start time* are logged into a sqlite databas
 Deployment
 ----------
 ```sh
+# NOTE: verify that all drivers needed for the wifi devices are loaded
+
 $ sqlite3 wifi-observer.db < wifi-observer.db.sql
 $ vim wifi-observer.conf
   # adapt to your needed
@@ -23,6 +25,14 @@ $ vim wifi-observer.conf
 # adapt the BASE_DIR so that it is pointing into the wifi-observer directory
 $ vim observer.py
   BASE_DIR = '<dir-of-wifi-observer>'
+
+# install services
+# observer
+wifi-observer.sh.conf   # upstart
+wifi-observer.services  # systemd
+
+# webgui, ONLY DEBUGGING
+wo-webgui.sh.conf       # upstart
 
 $ python3.4 observer.py   # run observer
 
