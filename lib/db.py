@@ -58,8 +58,9 @@ def getAllDates(db_path):
 
     sql_string = 'SELECT DISTINCT date(time_start, "unixepoch", "localtime", "start of day") FROM data'
     entries = executeSQL(db_conn, sql_string)
+    final = entries.fetchall()
     db_conn.close()
-    return entries.fetchall()
+    return final
 
 def getStats(db_path):
     db_conn = connectDB(db_path)
@@ -105,7 +106,6 @@ def getStats(db_path):
 
     sql_string = 'select date(time_start, "unixepoch", "localtime", "start of day") as time_start_coll, ssid_fk, ssids.ssid, bssid_fk, bssids.bssid, count(data.id),time_needed_dhcp IS NULL as time_needed_dhcp_null,time_needed_conn IS NULL as time_needed_conn_null from data left join ssids on data.ssid_fk=ssids.id left join bssids on data.bssid_fk=bssids.id group by ssid_fk,bssid_fk, time_needed_dhcp IS NULL, time_needed_conn IS NULL, date(time_start, "unixepoch", "localtime", "start of day") order by datetime(time_start, "unixepoch", "localtime", "start of day")'
     entries = executeSQL(db_conn, sql_string)
-    db_conn.close()
     for entry in entries.fetchall():
         for type in types:
             try: date_mapper[entry[DATE]]
@@ -182,6 +182,7 @@ def getStats(db_path):
         glob_stats['total']['total']['conn_null_count'] += entry[ID_COUNT] if entry[CONN_NULL] == 1 else 0
         glob_stats['total']['total']['dhcp_null_count'] += entry[ID_COUNT] if entry[DHCP_NULL] == 1 and entry[CONN_NULL] == 0 else 0
 
+        db_conn.close()
     return [stats, glob_stats]
 
 def commit(db_conn):
