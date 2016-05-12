@@ -26,14 +26,15 @@ config = yaml.load(file)
 file.close()
 
 DB = os.path.join(BASE_DIR, config['database'])
-db_connection = connectDB(DB)
 
 # functions
 def executeCheck():
     for ssid in config['checks']['ssids'].keys():
+        db_connection = connectDB(DB)
         sanity = checkSSID(config['checks']['ssids'][ssid]['name'], config['checks']['ssids'][ssid]['encrypted'], config)
 
         writeCheck(db_connection, sanity, {'conn' : config['checks']['failed_conn'], 'dhcp' : config['checks']['failed_dhcp']})
+        db_connection = connectDB(DB)
         print(sanity)
 
 # excecution
