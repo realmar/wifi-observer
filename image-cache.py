@@ -10,7 +10,7 @@ sys.path.append(BASE_DIR)
 
 import subprocess, datetime
 
-date = str(datetime.date.today().year + '-' + datetime.date.today().month + '-' + datetime.date.today().day)
+date = str(datetime.date.today().year) + '-' + str(datetime.date.today().month) + '-' + str(datetime.date.today().day)
 proc = subprocess.Popen(['mkdir', '-p', os.path.join(BASE_DIR, 'tmp')], stdout=subprocess.PIPE)
 proc.communicate()
 proc = subprocess.Popen(['cp', '-r', os.path.join(BASE_DIR, 'gnuplotfile'), os.path.join(BASE_DIR, 'tmp/gnuplotfile')], stdout=subprocess.PIPE)
