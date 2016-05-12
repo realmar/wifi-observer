@@ -5,7 +5,7 @@
 
 import sys, os
 
-BASE_DIR = '/opt/astro-wlan-analyzer'
+BASE_DIR = '/opt/wifi-observer'
 sys.path.append(BASE_DIR)
 
 import subprocess, datetime
