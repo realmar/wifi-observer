@@ -104,7 +104,7 @@ def getStats(db_path):
 
     types = [ 'ssid', 'bssid' ]
 
-    sql_string = 'select date(time_start, "unixepoch", "localtime", "start of day") as time_start_coll, ssid_fk, ssids.ssid, bssid_fk, bssids.bssid, count(data.id),time_needed_dhcp IS NULL as time_needed_dhcp_null,time_needed_conn IS NULL as time_needed_conn_null from data left join ssids on data.ssid_fk=ssids.id left join bssids on data.bssid_fk=bssids.id group by ssid_fk,bssid_fk, time_needed_dhcp IS NULL, time_needed_conn IS NULL, date(time_start, "unixepoch", "localtime", "start of day") order by datetime(time_start, "unixepoch", "localtime", "start of day")'
+    sql_string = 'select date(time_start, "unixepoch", "localtime", "start of day") as time_start_coll, ssid_fk, ssids.ssid, bssid_fk, bssids.bssid, count(data.id),time_needed_dhcp IS NULL as time_needed_dhcp_null,time_needed_conn IS NULL as time_needed_conn_null from data left join ssids on data.ssid_fk=ssids.id left join bssids on data.bssid_fk=bssids.id group by ssid_fk,bssid_fk, time_needed_dhcp IS NULL, time_needed_conn IS NULL, date(time_start, "unixepoch", "localtime", "start of day") order by datetime(time_start, "unixepoch", "localtime", "start of day") desc'
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
         for type in types:
