@@ -6,7 +6,7 @@
 import sqlite3
 
 def connectDB(db):
-    return sqlite3.connect(db)
+    return sqlite3.connect(db, 20)
 
 def writeCheck(db_conn, sanity, timeouts):
     bssid_id = sanity['bssid']
