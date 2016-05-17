@@ -4,6 +4,7 @@
 #!/usr/bin/env python3.4
 
 import sqlite3
+from syslog import syslog
 
 def connectDB(db):
     return sqlite3.connect(db, 20)
@@ -195,6 +196,7 @@ def executeSQL(db_conn, sql_string):
         entries = c.execute(sql_string)
     except sqlite3.Error as e:
         print('sql error: ' + e.value)
+        syslog(syslog.LOG_ERR, 'sql error: ' + e.value)
         return True
 
     return entries
