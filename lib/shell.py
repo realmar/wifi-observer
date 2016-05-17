@@ -4,7 +4,7 @@
 #!/usr/bin/env python3.4
 
 import subprocess
-from syslog import syslog
+from syslog import syslog, LOG_INFO
 
 from lib.utils import decodeUTF8
 from time import sleep

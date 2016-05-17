@@ -4,7 +4,7 @@
 #!/usr/bin/env python3.4
 
 import sqlite3
-from syslog import syslog
+from syslog import syslog, LOG_INFO
 
 def connectDB(db):
     return sqlite3.connect(db, 20)
