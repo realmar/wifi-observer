@@ -33,7 +33,7 @@ def home():
 @app.route("/differentiate")
 def differentiate():
     stats = getStats(DB)
-    ssids = getSSIDsName()
+    ssids = getSSIDsName(DB)
     return render_template('home.html', ssids=ssids, diagrams=stats[0], glob=stats[1])
 
 @app.route("/get/<date>")

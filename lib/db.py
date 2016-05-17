@@ -76,13 +76,15 @@ def getSSIDs(db_path):
 
     return final
 
-def getSSIDsName(db_conn):
+def getSSIDsName(db_path):
+    db_conn = connectDB(db_path)
     final = []
 
     sql_string = 'SELECT ssid FROM ssids'
     entries = executeSQL(db_conn, sql_string)
     for entry in entries:
         final.append(entry[0])
+    db_conn.close()
 
     return final
 
