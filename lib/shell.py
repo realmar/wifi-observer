@@ -11,18 +11,18 @@ from time import sleep
 
 def disconnectWiFi(interface, defaults):
     proc = subprocess.Popen(['killall', 'wpa_supplicant'], stdout=subprocess.PIPE)
-    syslog(syslog.LOG_INFO, decodeUTF8(proc.communicate()))
+    syslog(LOG_INFO, decodeUTF8(proc.communicate()))
 
     print("disconnect")
 
     proc = subprocess.Popen(['dhclient', '-r', interface], stdout=subprocess.PIPE)
-    syslog(syslog.LOG_INFO, decodeUTF8(proc.communicate()))
+    syslog(LOG_INFO, decodeUTF8(proc.communicate()))
 
     # proc = subprocess.Popen(['iw', 'dev', interface, 'disconnect'], stdout=subprocess.PIPE)
     # proc.communicate()
 
     proc = subprocess.Popen(['ip', 'link', 'set', interface, 'down'], stdout=subprocess.PIPE)
-    syslog(syslog.LOG_INFO, decodeUTF8(proc.communicate()))
+    syslog(LOG_INFO, decodeUTF8(proc.communicate()))
 
     confDefaultGW(defaults['interface'], defaults['gateway'])
 
@@ -38,10 +38,10 @@ def connectWiFi(ssid, interface, wpa):
 
 def initializeInterface(interface):
     proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE)
-    syslog(syslog.LOG_INFO, decodeUTF8(proc.communicate()))
+    syslog(LOG_INFO, decodeUTF8(proc.communicate()))
     sleep(4)
     proc = subprocess.Popen(['iw', 'dev',  interface, 'scan' ], stdout=subprocess.PIPE)
-    syslog(syslog.LOG_INFO, decodeUTF8(proc.communicate()))
+    syslog(LOG_INFO, decodeUTF8(proc.communicate()))
 
 def getIP(interface):
     proc = subprocess.Popen(['dhclient', interface], stdout=subprocess.PIPE)
@@ -49,13 +49,13 @@ def getIP(interface):
 
 def killPID(pid):
     proc = subprocess.Popen(['kill', '-9',  str(pid)], stdout=subprocess.PIPE)
-    syslog(syslog.LOG_INFO, decodeUTF8(proc.communicate()))
+    syslog(LOG_INFO, decodeUTF8(proc.communicate()))
 
 def checkIP(gw):
     proc = subprocess.Popen(['ip', 'a'], stdout=subprocess.PIPE)
     out = proc.communicate()
     out = decodeUTF8(out)
-    syslog(syslog.LOG_INFO, out)
+    syslog(LOG_INFO, out)
     if ''.join(['inet ', gw[0:4]]) in out:
         return True
     else:
@@ -65,7 +65,7 @@ def checkConnection(interface):
     proc = subprocess.Popen(['iw', 'dev', interface, 'link'], stdout=subprocess.PIPE)
     out = proc.communicate()
     out = decodeUTF8(out)
-    syslog(syslog.LOG_INFO, out)
+    syslog(LOG_INFO, out)
     if 'Not connected' in out:
         return False
     else:
@@ -75,7 +75,7 @@ def doPingAvr(target, interface, count):
     proc = subprocess.Popen(['ping', ''.join(['-c', str(count)]), '-I', interface, target], stdout=subprocess.PIPE)
     out = proc.communicate()
     out = decodeUTF8(out)
-    syslog(syslog.LOG_INFO, out)
+    syslog(LOG_INFO, out)
 
     try:
         out = out.split(' = ')[1]
@@ -90,7 +90,7 @@ def getDBM(interface):
     proc = subprocess.Popen(['iw', 'dev', interface, 'link'], stdout=subprocess.PIPE)
     out = proc.communicate()
     out = decodeUTF8(out)
-    syslog(syslog.LOG_INFO, out)
+    syslog(LOG_INFO, out)
     try:
         out = out.split('signal: ')[1]
         out = out.split(' dBm')[0]
@@ -103,17 +103,17 @@ def getBSSID(interface):
     proc = subprocess.Popen(['iw', 'dev', interface, 'link'], stdout=subprocess.PIPE)
     out = proc.communicate()
     out = decodeUTF8(out)
-    syslog(syslog.LOG_INFO, out)
+    syslog(LOG_INFO, out)
     try:
         out = out.split('Connected to ')[1]
         out = out.split(' (on ')[0]
     except IndexError as e:
-        syslog(syslog.LOG_INFO, e.value)
+        syslog(LOG_INFO, e.value)
 
     return out
 
 def confDefaultGW(interface, gw):
     proc = subprocess.Popen(['ip', 'route', 'del', 'default'], stdout=subprocess.PIPE)
-    syslog(syslog.LOG_INFO, decodeUTF8(proc.communicate()))
+    syslog(LOG_INFO, decodeUTF8(proc.communicate()))
     proc = subprocess.Popen(['ip', 'route', 'add', 'default', 'via', gw, 'dev', interface], stdout=subprocess.PIPE)
-    syslog(syslog.LOG_INFO, decodeUTF8(proc.communicate()))
+    syslog(LOG_INFO, decodeUTF8(proc.communicate()))

@@ -196,7 +196,7 @@ def executeSQL(db_conn, sql_string):
         entries = c.execute(sql_string)
     except sqlite3.Error as e:
         print('sql error: ' + e.value)
-        syslog(syslog.LOG_ERR, 'sql error: ' + e.value)
+        syslog(LOG_ERR, 'sql error: ' + e.value)
         return True
 
     return entries
