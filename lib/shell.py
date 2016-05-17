@@ -104,8 +104,11 @@ def getBSSID(interface):
     out = proc.communicate()
     out = decodeUTF8(out)
     syslog(syslog.LOG_INFO, out)
-    out = out.split('Connected to ')[1]
-    out = out.split(' (on ')[0]
+    try:
+        out = out.split('Connected to ')[1]
+        out = out.split(' (on ')[0]
+    except IndexError as e:
+        syslog(syslog.LOG_INFO, e.value)
 
     return out
 
