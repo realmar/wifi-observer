@@ -194,7 +194,7 @@ def executeSQL(db_conn, sql_string):
     try:
         entries = c.execute(sql_string)
     except sqlite3.Error as e:
-        print('sql error: ' + e)
+        print('sql error: ' + e.value)
         return True
 
     return entries
