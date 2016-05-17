@@ -27,8 +27,8 @@ ssids = getSSIDs(DB)
 ssids.append({ 'name' : 'combined', 'where' : '' })
 
 for date in dates:
+    date = date[0]
     for ssid in ssids:
-        date = date[0]
         proc = subprocess.Popen(['mkdir', '-p', os.path.join(BASE_DIR, 'tmp')], stdout=subprocess.PIPE)
         proc.communicate()
         proc = subprocess.Popen(['cp', '-r', os.path.join(BASE_DIR, 'gnuplotfile'), os.path.join(BASE_DIR, 'tmp/gnuplotfile')], stdout=subprocess.PIPE)
