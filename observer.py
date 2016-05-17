@@ -14,6 +14,7 @@ import os
 import time
 
 from multiprocessing import Process
+from syslog import syslog, LOG_INFO
 
 from lib.db import connectDB, writeCheck
 from lib.checker import checkSSID
@@ -35,6 +36,7 @@ def executeCheck():
 
         writeCheck(db_connection, sanity, {'conn' : config['checks']['failed_conn'], 'dhcp' : config['checks']['failed_dhcp']})
         print(sanity)
+        syslog(LOG_INFO, sanity.__str__())
 
 # excecution
 try:
