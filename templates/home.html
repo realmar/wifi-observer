@@ -38,9 +38,11 @@
     {% for date,value in item.items() %}
       <div>
         <p class="dia_text">{{ date }}</p>
-        {% for ssid in ssids %}
-          {% include 'diagrams.html' %}
-        {% endfor %}
+        <div>
+          {% for ssid in ssids %}
+            {% include 'diagrams.html' %}
+          {% endfor %}
+        </div>
         <div>
           <h4>Total</h4>
           {% for name,stat in value.total.items() %}

@@ -1,1 +1,1 @@
-<img class="dia_img" alt="diagram: {{ date }}" src="/get/{{ date }}-{{ ssid }}" />
+<img class="dia_img" {% if ssid != 'combined' %}style="width: 49%;"{% endif %} alt="diagram: {{ date }}" src="/get/{{ date }}-{{ ssid }}" />
