@@ -8,7 +8,7 @@ import sys, os
 BASE_DIR = '/opt/wifi-observer'
 sys.path.append(BASE_DIR)
 
-from lib.db import getStats
+from lib.db import getStats, getSSIDsName
 
 import subprocess
 import yaml
@@ -27,8 +27,14 @@ DB = os.path.join(BASE_DIR, config['database'])
 @app.route("/")
 def home():
     stats = getStats(DB)
-    return render_template('home.html', diagrams=stats[0], glob=stats[1])
+    ssids = [ 'combined' ]
+    return render_template('home.html', ssids=ssids, diagrams=stats[0], glob=stats[1])
 
+@app.route("/differentiate")
+def differentiate():
+    stats = getStats(DB)
+    ssids = getSSIDsName()
+    return render_template('home.html', ssids=ssids, diagrams=stats[0], glob=stats[1])
 
 @app.route("/get/<date>")
 def getSVG(date):

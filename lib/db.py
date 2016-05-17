@@ -63,6 +63,29 @@ def getAllDates(db_path):
     db_conn.close()
     return final
 
+def getSSIDs(db_path):
+    db_conn = connectDB(db_path)
+
+    final = []
+
+    sql_string = 'SELECT id, ssid FROM ssids'
+    entries = executeSQL(db_conn, sql_string)
+    for entry in entries.fetchall():
+        final.append({ 'name' : entry[0], 'where' : 'AND ssid_fk=' + entry[1] })
+    db_conn.close()
+
+    return final
+
+def getSSIDsName(db_conn):
+    final = []
+
+    sql_string = 'SELECT ssid FROM ssids'
+    entries = executeSQL(db_conn, sql_string)
+    for entry in entries:
+        final.append(entry[0])
+
+    return final
+
 def getStats(db_path):
     db_conn = connectDB(db_path)
 

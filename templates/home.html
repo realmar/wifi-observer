@@ -15,6 +15,9 @@
   <hr>
     <p style="color: green; line-height: 1em; height: auto;">such performance. wow.</p>
   <hr>
+  <hr>
+    <a href="/differentiate" style="line-height: 1em; height: auto;">Differentiate results</a>
+  <hr>
   <div>
      <h3><b>Global Stats</b></h3>
      <h4>Total</h4>
@@ -35,7 +38,9 @@
     {% for date,value in item.items() %}
       <div>
         <p class="dia_text">{{ date }}</p>
-        <img class="dia_img" alt="diagram: {{ date }}" src="/get/{{ date }}" />
+        {% for ssid in ssids %}
+          {% include 'diagrams.html' %}
+        {% endfor %}
         <div>
           <h4>Total</h4>
           {% for name,stat in value.total.items() %}

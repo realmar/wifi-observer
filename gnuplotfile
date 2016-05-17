@@ -1,6 +1,6 @@
 set datafile separator '|'
 set terminal svg enhanced size 1600,800 fname 'Verdana' fsize 8 enhanced background rgb 'white'
-set output '/opt/wifi-observer/static/<date>.svg'
+set output '/opt/wifi-observer/static/<date>-<ssid>.svg'
 set xlabel "Date"
 set ylabel "Time [s]"
 set timefmt "%H:%M:%S"
@@ -14,6 +14,7 @@ set boxwidth 30
 set palette defined (1 'green', 2 'blue', 3 'yellow', 4 'red', 5 'magenta', 6 'orange')
 labels="Ping DHCP Connect"
 select_day = '<date>'
+additional_where = '<addwhere>'
 
-plot '< sqlite3 -init init.sql /opt/wifi-observer/wifi-observer.db "SELECT time(time_start, \"unixepoch\", \"localtime\") as timestamp, coalesce(time_needed_conn, 0) as connect, coalesce(time_needed_dhcp, 0) as dhcp, coalesce(ping_average, 0)/10.0 as ping FROM data WHERE datetime(time_start,\"unixepoch\",\"localtime\") > datetime(\"'.select_day.'\",\"localtime\",\"start of day\",\"+7 hours\") AND datetime(time_start,\"unixepoch\",\"localtime\") < datetime(\"'.select_day.'\",\"localtime\",\"start of day\",\"+20 hours\");" 2> /dev/null' \
+plot '< sqlite3 -init init.sql /opt/wifi-observer/wifi-observer.db "SELECT time(time_start, \"unixepoch\", \"localtime\") as timestamp, coalesce(time_needed_conn, 0) as connect, coalesce(time_needed_dhcp, 0) as dhcp, coalesce(ping_average, 0)/10.0 as ping FROM data WHERE datetime(time_start,\"unixepoch\",\"localtime\") > datetime(\"'.select_day.'\",\"localtime\",\"start of day\",\"+7 hours\") AND datetime(time_start,\"unixepoch\",\"localtime\") < datetime(\"'.select_day.'\",\"localtime\",\"start of day\",\"+20 hours\") '.additional_where.';" 2> /dev/null' \
 using 1:($2+$3+$4 > 0 ? $2+$3+$4 : 20):($4 > 0 ? 3 : 6) with boxes title "Ping in 10 ms" palette, '' using 1:($3 > 0 ? $2+$3 : 20):($3 > 0 ? 2 : 5) with boxes title 'DHCP in s' palette, '' using 1:($2 > 0 ? $2 : 20):($2 > 0 ? 1 : 4) with boxes title 'Connect in s' palette
