@@ -1,5 +1,5 @@
-<div class="inline">
+<div class="inline" {% if ssid != 'combined' %}style="width: 49%;"{% endif %}>
   <p class="date_text inline">{{ ssid }}</p>
   <br>
-  <img class="dia_img inline" {% if ssid != 'combined' %}style="width: 49%;"{% endif %} alt="diagram: {{ date }}" src="/get/{{ date }}-{{ ssid }}" />
+  <img class="dia_img inline" alt="diagram: {{ date }}" src="/get/{{ date }}-{{ ssid }}" />
 </div>
