@@ -1,1 +1,4 @@
-<img class="dia_img" {% if ssid != 'combined' %}style="width: 49%;"{% endif %} alt="diagram: {{ date }}" src="/get/{{ date }}-{{ ssid }}" />
+<div class="inline">
+  <p class="dia_text">{{ ssid }}</p>
+  <img class="dia_img" {% if ssid != 'combined' %}style="width: 49%;"{% endif %} alt="diagram: {{ date }}" src="/get/{{ date }}-{{ ssid }}" />
+</div>
