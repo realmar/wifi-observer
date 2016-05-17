@@ -71,7 +71,7 @@ def getSSIDs(db_path):
     sql_string = 'SELECT id, ssid FROM ssids'
     entries = executeSQL(db_conn, sql_string)
     for entry in entries.fetchall():
-        final.append({ 'name' : entry[1], 'where' : 'AND ssid_fk=' + entry[0] })
+        final.append({ 'name' : entry[1], 'where' : 'AND ssid_fk=' + str(entry[0]) })
     db_conn.close()
 
     return final
