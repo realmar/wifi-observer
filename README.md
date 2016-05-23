@@ -29,7 +29,7 @@ $ vim observer.py webgui.py image-cache.py build-all-images.py webgui.wsgi
 
 # also adapt the pathes in the gnuplotfile
 
-# install services
+# install services, located in services/*
 # observer
 wifi-observer.sh.conf   # upstart
 wifi-observer.services  # systemd
