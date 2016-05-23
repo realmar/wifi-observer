@@ -1,0 +1,13 @@
+[Unit]
+Description=wifi-observer - I will watch over your wifi networks
+
+[Service]
+User=root
+Group=root
+PIDFile=/var/run/wifi-observer.pid
+ExecStartPre=/bin/rm -rf /var/run/wifi-observer.pid
+ExecStart=/usr/bin/python3.4 /opt/astro-wlan-analyzer/observer.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

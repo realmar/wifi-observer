@@ -1,0 +1,19 @@
+set datafile separator '|'
+set terminal svg enhanced size 1600,800 fname 'Verdana' fsize 8 enhanced background rgb 'white'
+set output '/opt/wifi-observer/static/2016-05-13-cust.svg'
+set xlabel "Date"
+set ylabel "Time [s]"
+set timefmt "%H:%M:%S"
+set format x "%H:%M"
+set xdata time
+#set xrange ["06:50:00":"20:10:00"]
+set yrange [0:30]
+unset colorbox
+set style fill solid 1
+set boxwidth 30
+set palette defined (1 'green', 2 'blue', 3 'yellow', 4 'red', 5 'magenta', 6 'orange')
+labels="Ping DHCP Connect"
+select_day = '2016-05-13'
+
+plot '< sqlite3 -init init.sql /opt/wifi-observer/wifi-observer.db "SELECT time(time_start, \"unixepoch\", \"localtime\") as timestamp, coalesce(time_needed_conn, 0) as connect, coalesce(time_needed_dhcp, 0) as dhcp, coalesce(ping_average, 0)/10.0 as ping FROM data WHERE datetime(time_start,\"unixepoch\",\"localtime\") > datetime(\"'.select_day.'\",\"localtime\",\"start of day\") AND datetime(time_start,\"unixepoch\",\"localtime\") < datetime(\"'.select_day.'\",\"localtime\",\"start of day\",\"+24 hours\");" 2> /dev/null' \
+using 1:($2+$3+$4 > 0 ? $2+$3+$4 : 20):($4 > 0 ? 3 : 6) with boxes title "Ping in 10 ms" palette, '' using 1:($3 > 0 ? $2+$3 : 20):($3 > 0 ? 2 : 5) with boxes title 'DHCP in s' palette, '' using 1:($2 > 0 ? $2 : 20):($2 > 0 ? 1 : 4) with boxes title 'Connect in s' palette
