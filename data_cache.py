@@ -22,4 +22,4 @@ file.close()
 DB = os.path.join(BASE_DIR, config['database'])
 db_connection = connectDB(DB)
 
-generateCSV(db_connection, os.path.join(BASE_DIR, 'static/data.csv'))
+generateCSV(db_connection, os.path.join(BASE_DIR, 'static/d3/data.csv'))
