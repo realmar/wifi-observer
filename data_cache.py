@@ -25,7 +25,4 @@ db_connection = connectDB(DB)
 current_week = datetime.datetime.today().strftime("%W")
 current_year = datetime.datetime.today().strftime("%Y")
 
-if int(current_week) % 2 == 0:
-    generateCSV(db_connection, os.path.join(BASE_DIR, 'static/d3/' + current_year + '-' + str(int(current_week) - 1) + '-' + current_week + '.csv'), str(int(current_week) - 1), str(current_week))
-else:
-    generateCSV(db_connection, os.path.join(BASE_DIR, 'static/d3/' + current_year + '-' + current_week + '-' + str(int(current_week) + 1) + '.csv'), current_week, str(int(current_week) + 1))
+generateCSV(db_connection, os.path.join(BASE_DIR, 'static/d3/' + current_year + '-' + str(int(current_week) - 1) + '-' + current_week + '.csv'), str(int(current_week) - 1), current_week)

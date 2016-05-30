@@ -25,5 +25,5 @@ db_connection = connectDB(DB)
 current_week = datetime.datetime.today().strftime("%W")
 current_year = datetime.datetime.today().strftime("%Y")
 
-for i in range(1, int(current_week) + 1, 2):
+for i in range(1, int(current_week)):
     generateCSV(db_connection, os.path.join(BASE_DIR, 'static/d3/' + current_year + '-' + str(i) + '-' + str(i + 1) + '.csv'), str(i), str(i + 1))
