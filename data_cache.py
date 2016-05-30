@@ -5,8 +5,7 @@
 
 import sys, os
 
-# BASE_DIR = '/opt/wifi-observer'
-BASE_DIR = '/home/amartako/Documents/Projects/astro-wlan-analyzer'
+BASE_DIR = '/opt/wifi-observer'
 sys.path.append(BASE_DIR)
 
 import yaml
