@@ -3,7 +3,7 @@
 
 #!/usr/bin/env python3.4
 
-import sqlite3
+import sqlite3, csv
 from syslog import syslog, LOG_INFO
 
 def connectDB(db):
@@ -87,6 +87,25 @@ def getSSIDsName(db_path):
     db_conn.close()
 
     return final
+
+def generateCSV(db_conn, csv_file):
+    sql_string = 'select data.id, datetime(time_start, "unixepoch") as time_start_coll, time_needed_conn IS NULL as time_needed_conn_null, time_needed_dhcp IS NULL as time_needed_dhcp_null, ssids.ssid, bssids.bssid from data left join ssids on data.ssid_fk=ssids.id left join bssids on data.bssid_fk=bssids.id order by datetime(time_start, "unixepoch") asc'
+
+    entries = executeSQL(db_conn, sql_string)
+
+    ID = 0
+    TIMESTAMP = 1
+    CONN_NULL = 2
+    DHCP_NULL = 3
+    SSID = 4
+    BSSID = 5
+
+    with open(csv_file, 'w') as cf:
+        fieldnames = [ 'id', 'timestamp', 'conn', 'dhcp', 'ssid', 'bssid' ]
+        writer = csv.DictWriter(cf, fieldnames=fieldnames)
+        writer.writeheader()
+        for entry in entries:
+            writer.writerow({'id' : entry[ID], 'timestamp' : entry[TIMESTAMP], 'conn' : entry[CONN_NULL], 'dhcp' : entry[DHCP_NULL], 'ssid' : entry[SSID], 'bssid' : entry[BSSID]})
 
 def getStats(db_path):
     db_conn = connectDB(db_path)
