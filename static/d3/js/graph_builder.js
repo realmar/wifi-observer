@@ -47,7 +47,16 @@ function visualize(data) {
         function reduceInitial() { return 0; }
     );
     var group_conn_fails = dim_hour.group().reduceSum(function(d) { return d.conn == '0' ? 1 : 0; });
-    var group_dhcp_fails = dim_hour.group().reduceSum(function(d) { return d.dhcp == '0' ? 1 : 0; });
+    var group_dhcp_fails = dim_hour.group().reduceSum(function(d) {
+      // return d.dhcp == '0' ? 1 : 0;
+      if(d.dhcp == '0' && d.conn == '0' || d.dhcp == '1' && d.conn == '0') {
+        return 'noconn';
+      }else if(d.dhcp == '0' && d.conn == '1') {
+        return 0;
+      }else{
+        return 1;
+      }
+    });
 
     var timerange = [d3.min(data,function(d){return d.timestamp}), d3.max(data,function(d){return d.timestamp})];
 
