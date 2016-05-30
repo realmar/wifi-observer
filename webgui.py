@@ -37,22 +37,19 @@ def differentiate():
 
 @app.route("/d3")
 def d3():
-    print('test3')
     current_week = datetime.datetime.today().strftime('%W')
     current_year = datetime.datetime.today().strftime('%Y')
-    return renderD3(current_week, current_year)
+    return renderD3(int(current_week), int(current_year))
 
 @app.route("/d3/<year>/<end>")
 def d3_cust(year, end):
-    print('test2')
-    return renderD3(end, year)
+    return renderD3(int(end), int(year))
 
 @app.route("/get/<date>")
 def getSVG(date):
     return app.send_static_file(date + '.svg')
 
 def renderD3(current_week, current_year):
-    print('test')
     return render_template('d3/index.html', week={ 'start' : current_week - 1, 'end' : current_week, 'year' : current_year })
 
 if __name__ == "__main__":
