@@ -32,9 +32,17 @@ function visualize(data) {
 
     var dim_id    = cf.dimension(function(d) { return d.id; });
     var dim_conn  = cf.dimension(function(d) { return d.conn; });
-    var dim_dhcp  = cf.dimension(function(d) { return d.dhcp; });
+    var dim_dhcp  = cf.dimension(function(d) {
+         if(d.conn == '0') {
+             return 2;
+         }else if(d.dhcp == '0' && d.conn == '1') {
+             return 0;
+         }else{
+             return 1;
+         }
+    });
     var dim_ssid  = cf.dimension(function(d) { return d.ssid; });
-    var dim_bssid = cf.dimension(function(d) { return d.bssid; });
+    var dim_bssid = cf.dimension(function(d) { if(!(d.dhcp == '1' && d.conn == '0')) { return d.bssid; } else { return 3; } });
     var dim_hour  = cf.dimension(function(d) { return d3.time.hour(d.timestamp); });
 
     var group_conn  = dim_conn.group().reduceCount();
@@ -48,14 +56,11 @@ function visualize(data) {
     );
     var group_conn_fails = dim_hour.group().reduceSum(function(d) { return d.conn == '0' ? 1 : 0; });
     var group_dhcp_fails = dim_hour.group().reduceSum(function(d) {
-      // return d.dhcp == '0' ? 1 : 0;
-      if(d.dhcp == '0' && d.conn == '0' || d.dhcp == '1' && d.conn == '0') {
-        return 'noconn';
-      }else if(d.dhcp == '0' && d.conn == '1') {
-        return 0;
-      }else{
-        return 1;
-      }
+        if(d.dhcp == '0' && d.conn == '1') {
+            return 1;
+        }else{
+            return 0;
+	}
     });
 
     var timerange = [d3.min(data,function(d){return d.timestamp}), d3.max(data,function(d){return d.timestamp})];
@@ -80,12 +85,12 @@ function visualize(data) {
         .group(group_dhcp)
         .ordinalColors(colors_rgg)
         .label(function(d) {
-            if (d.key == '1'){
+            if (d.key == 1){
                 return 'success';
-            } else if (d.key == '0'){
+            } else if (d.key == 0){
                 return 'failure';
-            } else {
-                return d.key;
+            } else if (d.key == 2) {
+                return 'noconn';
             }
         })
         .title(function(d) { return d.value; });
@@ -106,7 +111,13 @@ function visualize(data) {
         .group(group_bssid)
         .ordinalColors(colors_custom)
         .labelOffsetX(5)
-        .label(function(d) { return d.key; })
+        .label(function(d) {
+	    if(d.key == '' && d.key != 3) {
+	        return 'noconn';
+	    }else{
+		return d.key;
+            }
+        })
         .title(function(d) { return d.value; })
         .elasticX(false)
         .x(d3.scale.log().clamp(true).domain([1, 15000]).range([0,350]).nice());
