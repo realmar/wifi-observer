@@ -5,3 +5,5 @@
 *.svg
 nohup.out
 *.pyc
+*.DS_Store
+*.csv
