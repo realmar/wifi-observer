@@ -10,8 +10,7 @@ sys.path.append(BASE_DIR)
 
 from lib.db import getStats, getSSIDsName
 
-import subprocess
-import yaml
+import subprocess, yaml, datetime
 from flask import Flask, render_template
 app = Flask(__name__)
 
@@ -38,11 +37,20 @@ def differentiate():
 
 @app.route("/d3")
 def d3():
-    return app.send_static_file('d3/index.html')
+    current_week = datetime.datetime.today().strftime('%W')
+    current_year = datetime.datetime.today().strftime('%Y')
+    return renderD3(current_week, current_year)
+
+@app.route("/d3/<year>/<end>")
+def d3_cust(year, start, end):
+    return renderD3(end, year)
 
 @app.route("/get/<date>")
 def getSVG(date):
     return app.send_static_file(date + '.svg')
+
+def renderD3(current_week, current_year):
+    return render_template('d3/index.html', week={ 'start' : current_week if current_week % 2 == 1 else current_week - 1, 'end' : current_week if current_week % 2 == 0 else current_week + 1, 'year' : current_year })
 
 if __name__ == "__main__":
     app.run(debug=False)
