@@ -36,6 +36,10 @@ def differentiate():
     ssids = getSSIDsName(DB)
     return render_template('home.html', ssids=ssids, diagrams=stats[0], glob=stats[1])
 
+@app.route("/d3")
+def d3():
+    return app.send_static_file('d3/index.html')
+
 @app.route("/get/<date>")
 def getSVG(date):
     return app.send_static_file(date + '.svg')
