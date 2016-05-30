@@ -89,7 +89,7 @@ def getSSIDsName(db_path):
     return final
 
 def generateCSV(db_conn, csv_file):
-    sql_string = 'select data.id, datetime(time_start, "unixepoch") as time_start_coll, time_needed_conn IS NULL as time_needed_conn_null, time_needed_dhcp IS NULL as time_needed_dhcp_null, ssids.ssid, bssids.bssid from data left join ssids on data.ssid_fk=ssids.id left join bssids on data.bssid_fk=bssids.id order by datetime(time_start, "unixepoch") asc'
+    sql_string = 'select data.id, datetime(time_start, "unixepoch") as time_start_coll, time_needed_conn IS NOT NULL as time_needed_conn_null, time_needed_dhcp IS NOT NULL as time_needed_dhcp_null, ssids.ssid, bssids.bssid from data left join ssids on data.ssid_fk=ssids.id left join bssids on data.bssid_fk=bssids.id order by datetime(time_start, "unixepoch") asc'
 
     entries = executeSQL(db_conn, sql_string)
 
