@@ -52,7 +52,8 @@
               </p>
               <script>
                 function changeWeek() {
-                  $("form#custom_selector").attr("action", "/d3/{{ week.year }}/" + (var tmp = parseInt($("input#custom_week").val())) % 53 == 0 ? 1 : tmp;
+                  var tmp = parseInt($("input#custom_week").val());
+                  $("form#custom_selector").attr("action", "/d3/{{ week.year }}/" + tmp % 53 == 0 ? 1 : tmp;
                 }
               </script>
             </div>
