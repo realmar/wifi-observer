@@ -5,7 +5,7 @@
 
 import sys, os
 
-BASE_DIR = '/home/amartako/Documents/Projects/astro-wlan-analyzer'
+BASE_DIR = '/opt/wifi-observer'
 sys.path.append(BASE_DIR)
 
 import yaml, datetime
@@ -22,8 +22,4 @@ file.close()
 DB = os.path.join(BASE_DIR, config['database'])
 db_connection = connectDB(DB)
 
-current_week = datetime.datetime.today().strftime("%W")
-current_year = datetime.datetime.today().strftime("%Y")
-
-for i in range(1, int(current_week)):
-    generateCSV(db_connection, os.path.join(BASE_DIR, 'static/d3/' + current_year + '-' + str(i) + '-' + str(i + 1) + '.csv'), str(i), str(i + 1))
+generateCSV(db_connection, os.path.join(BASE_DIR, 'static/d3/all.csv'), str(1), str(52))

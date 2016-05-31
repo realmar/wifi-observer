@@ -9,6 +9,10 @@
           .inline {
             display: inline-block;
           }
+
+          span.isHidden {
+            display: none;
+          }
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
         <script src="/static/d3/js/d3.min.js"></script>
@@ -27,38 +31,49 @@
     <body>
         <div class="container">
             <h1>wifi observer</h1>
-            <div id="datacount-projects">
-                <p>
-                    Showing <span class="filter-count"></span> out of <span class="total-count"></span> connections.
-                    <a href='javascript:dc.filterAll(); dc.renderAll();'>Reset Filters</a>
-                </p>
+            <div class="row">
+              <div id="datacount-projects">
+                  <p>
+                      Showing <span class="filter-count"></span> out of <span class="total-count"></span> connections.
+                      <a href='javascript:dc.filterAll(); dc.renderAll();'>Reset Filters</a>
+                  </p>
+              </div>
             </div>
-            <hr style="display: table-caption;">
-            <div>
-              <p class="inline">showing results from week:
-                <span id="data_week_start">{{ week.start }}</span>
-                 to
-                <span id="data_week_end">{{ week.end }}</span>
-                 in the year:
-                <span id="data_year">{{ week.year }}</span>
-                 |
-                 <a href="/d3/{{ week.previous_year }}/{{ week.prev }}">< Previous</a>
-                 <a href="/d3/{{ week.next_year }}/{{ week.next }}">Next ></a>
-                  | Go to week
-                <form class="inline" id="custom_selector" action="#" onsubmit="return changeWeek();">
-                  <input id="custom_week" type="text">
-                  <input type="submit">
-                </form>
-              </p>
-              <script>
-                function changeWeek() {
-                  var tmp = parseInt($("input#custom_week").val()) % 53;
-                  if(tmp == 0) {
-                    tmp = 1;
-                  }
-                  $("form#custom_selector").attr("action", "/d3/{{ week.year }}/" + tmp);
-                }
-              </script>
+            <div class="row">
+              <div class="inline">
+                <p class="inline">showing results from week:
+                  <span id="specific_results"><span id="data_week_start">{{ week.start }}</span>
+                   to
+                  <span id="data_week_end">{{ week.end }}</span>
+                   in the year:
+                  <span id="data_year">{{ week.year }}</span></span>
+                  <span id="all_results" class="isHidden"><b>All</b></span>
+                   |
+                   <a href="/d3/{{ week.previous_year }}/{{ week.prev }}">< Previous</a> -
+                   <a href="javascript:$('span#specific_results').addClass('isHidden');$('span#all_results').removeClass('isHidden');displayData(true);">All</a> -
+                   <a href="/d3/{{ week.next_year }}/{{ week.next }}">Next ></a>
+                    | Go to week
+                </p>
+                </div>
+                <div style="display: inline-table; vertical-align: middle;">
+                  <form class="inline" id="custom_selector" action="#" onsubmit="return changeWeek();">
+                    <div class="input-group">
+                      <input id="custom_week" type="text" class="form-control" placeholder="Enter week number ...">
+                      <span class="input-group-btn">
+                        <input class="btn btn-default" type="submit">
+                      </span>
+                    </div>
+                  </form>
+                  <script>
+                    function changeWeek() {
+                      var tmp = parseInt($("input#custom_week").val()) % 53;
+                      if(tmp == 0) {
+                        tmp = 1;
+                      }
+                      $("form#custom_selector").attr("action", "/d3/{{ week.year }}/" + tmp);
+                    }
+                  </script>
+              </div>
             </div>
             <div style="clear:both;"></div>
 

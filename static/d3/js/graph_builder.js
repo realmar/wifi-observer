@@ -5,15 +5,23 @@ var colors_duo    = ['#1F77B4', '#9ADA81'];
 var colors_custom = '#7F7F7F #1F77B4 #9467BD #8C564B #E377C2 #17BECF #FF7F0E #BCBD22'.split(' ');
 var date_format   = d3.time.format.utc('%Y-%m-%d %H:%M:%S');
 
-d3.csv("/static/d3/" + $("span#data_year")[0].innerHTML + "-" + $("span#data_week_start")[0].innerHTML + "-" + $("span#data_week_end")[0].innerHTML + ".csv", function(data) {
-    return parse(data);
-}, function(error, data) {
-    if (error) {
-        console.log(error);
-    } else {
-        visualize(data);
-    }
-});
+function displayData(render_all = false) {
+  var url = "";
+  if(!render_all) {
+    url = "/static/d3/" + $("span#data_year")[0].innerHTML + "-" + $("span#data_week_start")[0].innerHTML + "-" + $("span#data_week_end")[0].innerHTML + ".csv";
+  }else{
+    url = "/static/d3/all.csv"
+  }
+  d3.csv(url, function(data) {
+      return parse(data);
+  }, function(error, data) {
+      if (error) {
+          console.log(error);
+      } else {
+          visualize(data);
+      }
+  });
+}
 
 function parse(data) {
     return {
@@ -202,3 +210,6 @@ function visualize(data) {
 
     dc.renderAll();
 }
+
+
+displayData();
