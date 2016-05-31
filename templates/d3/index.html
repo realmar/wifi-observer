@@ -35,10 +35,24 @@
             </div>
             <hr style="display: table-caption;">
             <div>
-              <p class="inline">showing results from week: <span id="data_week_start">{{ week.start }}</span> to <span id="data_week_end">{{ week.end }}</span> in the year: <span id="data_year">{{ week.year }}</span> | <a href="/d3/{{ week.year }}/{{ week.end - 1 }}">< Previous</a> <a href="/d3/{{ week.year }}/{{ week.end + 1 }}">Next ></a> | Go to week <form class="inline" id="custom_selector" action="#" onsubmit="return changeWeek();"><input id="custom_week" type="text"><input type="submit"></form></p>
+              <p class="inline">showing results from week:
+                <span id="data_week_start">{{ week.start }}</span>
+                 to
+                <span id="data_week_end">{{ week.end }}</span>
+                 in the year:
+                <span id="data_year">{{ week.year }}</span>
+                 |
+                 <a href="/d3/{{ week.previous_year }}/{{ week.prev }}">< Previous</a>
+                 <a href="/d3/{{ week.next_year }}/{{ week.next }}">Next ></a>
+                  | Go to week
+                <form class="inline" id="custom_selector" action="#" onsubmit="return changeWeek();">
+                  <input id="custom_week" type="text">
+                  <input type="submit">
+                </form>
+              </p>
               <script>
                 function changeWeek() {
-                  $("form#custom_selector").attr("action", "/d3/{{ week.year }}/" + $("input#custom_week").val());
+                  $("form#custom_selector").attr("action", "/d3/{{ week.year }}/" + (var tmp = parseInt($("input#custom_week").val())) % 53 == 0 ? 1 : tmp;
                 }
               </script>
             </div>

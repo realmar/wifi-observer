@@ -50,7 +50,19 @@ def getSVG(date):
     return app.send_static_file(date + '.svg')
 
 def renderD3(current_week, current_year):
-    return render_template('d3/index.html', week={ 'start' : current_week - 1, 'end' : current_week, 'year' : current_year })
+    next_year = current_year
+    previous_year = current_year
+    next_week = current_week + 1
+    previous_week = current_week - 1;
+
+    if current_week + 1 == 53:
+        next_week = 1
+        next_year = current_year + 1
+    elif current_week - 1 < 1:
+        previous_week = 52 - abs(current_week - 1)
+        previous_year = current_year - 1
+
+    return render_template('d3/index.html', week={ 'start' : current_week - 1, 'end' : current_week, 'next' : next_week, 'prev' : previous_week, 'next_year' : next_year, 'previous_year' : previous_year, 'year' : current_year })
 
 if __name__ == "__main__":
     app.run(debug=False)
