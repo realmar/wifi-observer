@@ -34,6 +34,8 @@ function parse(data) {
     };
 };
 
+var group_conn, group_dhcp, group_ssid, group_bssid, group_const, group_conn_fails, group_dhcp_fails;
+
 function visualize(data) {
 
     var cf  = crossfilter(data);
@@ -49,26 +51,30 @@ function visualize(data) {
              return 1;
          }
     });
-    var dim_ssid  = cf.dimension(function(d) { return d.ssid; });
-    var dim_bssid = cf.dimension(function(d) { if(!(d.dhcp == '1' && d.conn == '0')) { return d.bssid; } else { return 3; } });
-    var dim_hour  = cf.dimension(function(d) { return d3.time.hour(d.timestamp); });
+    dim_ssid  = cf.dimension(function(d) { return d.ssid; });
+    dim_bssid = cf.dimension(function(d) { if(!(d.dhcp == '1' && d.conn == '0')) { return d.bssid; } else { return 3; } });
+    dim_hour  = cf.dimension(function(d) { return d3.time.hour(d.timestamp); });
 
-    var group_conn  = dim_conn.group().reduceCount();
-    var group_dhcp  = dim_dhcp.group().reduceCount();
-    var group_ssid  = dim_ssid.group().reduceCount();
-    var group_bssid = dim_bssid.group().reduceCount();
-    var group_const = dim_hour.group().reduce(
+    group_conn  = dim_conn.group().reduceCount();
+    group_dhcp  = dim_dhcp.group().reduceCount();
+    group_ssid  = dim_ssid.group().reduceCount();
+    group_bssid = dim_bssid.group().reduce(           // custom reduceCount function which
+        function reduceAdd(p, v) { return ++p; },     // starts with 1 instead of 0, to
+        function reduceRemove(p, v) { return --p; },  // set the render offset
+        function reduceInitial() { return 1; }
+    );
+    group_const = dim_hour.group().reduce(
         function reduceAdd(p, v) { return p; },
         function reduceRemove(p, v) { return p; },
         function reduceInitial() { return 0; }
     );
-    var group_conn_fails = dim_hour.group().reduceSum(function(d) { return d.conn == '0' ? 1 : 0; });
-    var group_dhcp_fails = dim_hour.group().reduceSum(function(d) {
+    group_conn_fails = dim_hour.group().reduceSum(function(d) { return d.conn == '0' ? 1 : 0; });
+    group_dhcp_fails = dim_hour.group().reduceSum(function(d) {
         if(d.dhcp == '0' && d.conn == '1') {
             return 1;
         }else{
             return 0;
-	}
+	      }
     });
 
     var timerange = [d3.min(data,function(d){return d.timestamp}), d3.max(data,function(d){return d.timestamp})];
@@ -126,9 +132,10 @@ function visualize(data) {
 		return d.key;
             }
         })
-        .title(function(d) { return d.value; })
+        .title(function(d) { return d.value - 1; })     // here we remove the offset set above
         .elasticX(false)
-        .x(d3.scale.log().clamp(true).domain([1, 15000]).range([0,350]).nice());
+        .x(d3.scale.log().clamp(true).domain([1, 15000]).range([0,350]).nice())
+        .xAxis().ticks(4);
 
     var conntime = dc.lineChart("#linechart-conn-time");
     conntime
