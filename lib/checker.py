@@ -33,7 +33,7 @@ def checkSSID(ssid, encrypted, config):
         if checkAuth(config['wifi_net']['interface'], config['supplicant_log']):
             break
 
-    while(True and !encrypted):
+    while(True and not encrypted):
         if time.time() - time_start > config['checks']['failed_conn']:
             is_failed = True
             break
