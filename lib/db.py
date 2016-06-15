@@ -32,9 +32,12 @@ def writeCheck(db_conn, sanity, timeouts):
 
     sql_string = 'INSERT INTO data(time_needed_conn, time_needed_dhcp, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + str(time_needed_conn) + ', ' + str(time_needed_dhcp) + ', ' + str(ping_average) + ', ' + str(int(sanity['time_start'])) + ', ' + str(sanity['dbm']) + ', ' + str(ssid_id) + ', ' + str(bssid_id) + ')'
 
-    entries = executeSQL(db_conn, sql_string)
+    info = {}
+    entries = executeSQL(db_conn, sql_string, info)
 
     commit(db_conn)
+
+    return info['id']
 
 def checkEntry(db_conn, table, column, search):
     sql_string = 'SELECT id FROM ' + table + ' WHERE ' + column + '="' + search + '"'
@@ -233,11 +236,12 @@ def getStats(db_path):
 def commit(db_conn):
     db_conn.commit()
 
-def executeSQL(db_conn, sql_string):
+def executeSQL(db_conn, sql_string, add_information={}):
     c = db_conn.cursor()
 
     try:
         entries = c.execute(sql_string)
+        add_information['id'] = c.lastrowid
     except sqlite3.Error as e:
         print('sql error: ' + e.value)
         syslog(LOG_ERR, 'sql error: ' + e.value)

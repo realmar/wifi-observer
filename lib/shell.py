@@ -26,11 +26,11 @@ def disconnectWiFi(interface, defaults):
 
     confDefaultGW(defaults['interface'], defaults['gateway'])
 
-def connectWiFi(ssid, interface, wpa, log=None):
+def connectWiFi(ssid, interface, wpa, logdir):
     if(wpa):
-        proc = subprocess.Popen('wpa_supplicant -i ' + interface + ' -c ' + '/etc/wpa_supplicant-' + ssid + '.conf  > ' + log + ' &', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+        proc = subprocess.Popen('wpa_supplicant -i ' + interface + ' -c ' + '/etc/wpa_supplicant-' + ssid + '.conf  > ' + logdir + '/' + ssid + '.tmplog &', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
     else:
-        proc = subprocess.Popen(['iw', 'dev',  interface, 'connect', ssid ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        proc = subprocess.Popen('iw dev ' + interface + ' connect -w ' + ssid + ' > ' + logdir + '/' + ssid + '.tmplog &' , stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
 
 def initializeInterface(interface):
     proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -57,15 +57,23 @@ def checkIP(gw):
     else:
         return False
 
-def checkConnection(interface):
-    proc = subprocess.Popen(['iw', 'dev', interface, 'link'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    out = proc.communicate()
-    out = decodeUTF8(out)
-    syslog(LOG_INFO, out)
-    if 'Not connected' in out:
-        return False
-    else:
+def checkConnection(interface, log):
+    file = open(log, 'r')
+    content = file.read()
+    file.close()
+    if 'connected to' in content:
         return True
+    else:
+        return False
+
+    # proc = subprocess.Popen(['iw', 'dev', interface, 'link'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    # out = proc.communicate()
+    # out = decodeUTF8(out)
+    # syslog(LOG_INFO, out)
+    # if 'Not connected' in out:
+    #     return False
+    # else:
+    #     return True
 
 def checkAuth(interface, log):
     file = open(log, 'r')

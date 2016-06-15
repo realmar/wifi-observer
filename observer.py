@@ -12,6 +12,7 @@ sys.path.append(BASE_DIR)
 import yaml
 import os
 import time
+import datetime
 
 from multiprocessing import Process
 from syslog import syslog, LOG_INFO
@@ -32,9 +33,24 @@ db_connection = connectDB(DB)
 # functions
 def executeCheck():
     for ssid in config['checks']['ssids'].keys():
-        sanity = checkSSID(config['checks']['ssids'][ssid]['name'], config['checks']['ssids'][ssid]['encrypted'], config)
+        sanity = checkSSID(config['checks']['ssids'][ssid]['name'], config['checks']['ssids'][ssid]['encrypted'], config, BASE_DIR + '/log')
 
-        writeCheck(db_connection, sanity, {'conn' : config['checks']['failed_conn'], 'dhcp' : config['checks']['failed_dhcp']})
+        id = writeCheck(db_connection, sanity, {'conn' : config['checks']['failed_conn'], 'dhcp' : config['checks']['failed_dhcp']})
+
+        try:
+            file = open(BASE_DIR + '/log/' + ssid + '.tmplog', 'r')
+        except:
+        else:
+            try:
+                gfile = open(BASE_DIR + '/log/' + ssid + '.log', 'a')
+            except:
+                file.close()
+            else:
+                gfile.write('==== SSID: ' + ssid + ' == ' + datetime.datetime.fromtimestamp(int(sanity['time_start'])).strftime('%Y-%m-%d %H:%M:%S') + ' == DB ID: ' + str(id))
+                gfile.write(file.read())
+                gfile.close()
+                file.close()
+
         print(sanity)
         syslog(LOG_INFO, sanity.__str__())
 

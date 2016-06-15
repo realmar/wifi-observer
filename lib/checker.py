@@ -7,7 +7,7 @@ import time
 
 from lib.shell import *
 
-def checkSSID(ssid, encrypted, config):
+def checkSSID(ssid, encrypted, config, logdir):
     sanity = {'ssid' : ssid,
     'bssid' : 0,
     'time_start' : 0,
@@ -23,14 +23,14 @@ def checkSSID(ssid, encrypted, config):
     time_start = time.time();
     sanity['time_start'] = time_start
 
-    connectWiFi(ssid, config['wifi_net']['interface'], encrypted, config['supplicant_log'])
+    connectWiFi(ssid, config['wifi_net']['interface'], encrypted, logdir)
 
     while(True and encrypted):
         if time.time() - time_start > config['checks']['failed_conn']:
             is_failed = True
             break
 
-        if checkAuth(config['wifi_net']['interface'], config['supplicant_log']):
+        if checkAuth(config['wifi_net']['interface'], logdir + '/' + ssid + '.tmplog'):
             break
 
     while(True and not encrypted):
@@ -38,7 +38,7 @@ def checkSSID(ssid, encrypted, config):
             is_failed = True
             break
 
-        if checkConnection(config['wifi_net']['interface']):
+        if checkConnection(config['wifi_net']['interface'], logdir + '/' + ssid + '.tmplog'):
             break
 
     time_end = time.time();
