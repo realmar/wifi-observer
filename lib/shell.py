@@ -58,9 +58,13 @@ def checkIP(gw):
         return False
 
 def checkConnection(interface, log):
-    file = open(log, 'r')
-    content = file.read()
-    file.close()
+    try:
+        file = open(log, 'r')
+        content = file.read()
+        file.close()
+    except:
+        return False
+
     if 'connected to' in content:
         return True
     else:

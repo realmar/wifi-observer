@@ -40,6 +40,7 @@ def executeCheck():
         try:
             file = open(BASE_DIR + '/log/' + ssid + '.tmplog', 'r')
         except:
+            pass
         else:
             try:
                 gfile = open(BASE_DIR + '/log/' + ssid + '.log', 'a')
