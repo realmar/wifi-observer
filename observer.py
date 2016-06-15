@@ -47,7 +47,7 @@ def executeCheck():
             except:
                 file.close()
             else:
-                gfile.write('==== SSID: ' + ssid + ' == ' + datetime.datetime.fromtimestamp(int(sanity['time_start'])).strftime('%Y-%m-%d %H:%M:%S') + ' == DB ID: ' + str(id))
+                gfile.write('==== SSID: ' + ssid + ' == ' + datetime.datetime.fromtimestamp(int(sanity['time_start'])).strftime('%Y-%m-%d %H:%M:%S') + ' == DB ID: ' + str(id) + '\n')
                 gfile.write(file.read())
                 gfile.close()
                 file.close()
