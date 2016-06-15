@@ -27,10 +27,14 @@ def disconnectWiFi(interface, defaults):
     confDefaultGW(defaults['interface'], defaults['gateway'])
 
 def connectWiFi(ssid, interface, wpa, logdir):
+    proc = subprocess.Popen('wpa_supplicant -i ' + interface + ' -c ' + '/etc/wpa_supplicant-' + ssid + '.conf  > ' + logdir + '/' + ssid + '.tmplog &', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+
+    '''
     if(wpa):
         proc = subprocess.Popen('wpa_supplicant -i ' + interface + ' -c ' + '/etc/wpa_supplicant-' + ssid + '.conf  > ' + logdir + '/' + ssid + '.tmplog &', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
     else:
         proc = subprocess.Popen('iw dev ' + interface + ' connect -w ' + ssid + ' > ' + logdir + '/' + ssid + '.tmplog &' , stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+    '''
 
 def initializeInterface(interface):
     proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -65,7 +69,7 @@ def checkConnection(interface, log):
     except:
         return False
 
-    if 'connected to' in content:
+    if 'CTRL-EVENT-CONNECTED' in content:
         return True
     else:
         return False
