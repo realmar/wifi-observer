@@ -86,7 +86,7 @@ def checkAuth(interface, log):
         file.close()
     except:
         return False
-        
+
     if 'Authentication succeeded' in content:
         return True
     else:
