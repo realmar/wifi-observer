@@ -80,9 +80,13 @@ def checkConnection(interface, log):
     #     return True
 
 def checkAuth(interface, log):
-    file = open(log, 'r')
-    content = file.read()
-    file.close()
+    try:
+        file = open(log, 'r')
+        content = file.read()
+        file.close()
+    except:
+        return False
+        
     if 'Authentication succeeded' in content:
         return True
     else:
