@@ -5,7 +5,7 @@
 
 import time
 
-from lib.shell import disconnectWiFi, connectWiFi, checkIP, checkConnection, doPingAvr, getDBM, getBSSID, getIP, confDefaultGW, killPID,initializeInterface
+from lib.shell import *
 
 def checkSSID(ssid, encrypted, config):
     sanity = {'ssid' : ssid,
@@ -23,8 +23,17 @@ def checkSSID(ssid, encrypted, config):
     time_start = time.time();
     sanity['time_start'] = time_start
 
-    connectWiFi(ssid, config['wifi_net']['interface'], encrypted)
-    while(True):
+    connectWiFi(ssid, config['wifi_net']['interface'], encrypted, config['supplicant_log'])
+
+    while(True and encrypted):
+        if time.time() - time_start > config['checks']['failed_conn']:
+            is_failed = True
+            break
+
+        if checkAuth(config['wifi_net']['interface'], config['supplicant_log']):
+            break
+
+    while(True and !encrypted):
         if time.time() - time_start > config['checks']['failed_conn']:
             is_failed = True
             break

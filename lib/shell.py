@@ -26,15 +26,11 @@ def disconnectWiFi(interface, defaults):
 
     confDefaultGW(defaults['interface'], defaults['gateway'])
 
-def connectWiFi(ssid, interface, wpa):
+def connectWiFi(ssid, interface, wpa, log=None):
     if(wpa):
-        proc = subprocess.Popen(['wpa_supplicant', '-B', '-i', interface, '-c', ''.join(['/etc/wpa_supplicant-', ssid, '.conf'])], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        proc = subprocess.Popen(['wpa_supplicant', '-B', '-i', interface, '-c', ''.join(['/etc/wpa_supplicant-', ssid, '.conf', '>', log, '&'])], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     else:
         proc = subprocess.Popen(['iw', 'dev',  interface, 'connect', ssid ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        # out = decodeUTF8(proc.communicate())
-        # print(out)
-
-        # proc = subprocess.Popen('ip link set ' + interface + ' up && ' + 'iw dev ' + interface + ' scan && ' + 'iw dev ' + interface + ' connect ' + ssid, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
 
 def initializeInterface(interface):
     proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -70,6 +66,15 @@ def checkConnection(interface):
         return False
     else:
         return True
+
+def checkAuth(interface, log):
+    file = open(log, 'r')
+    content = file.read()
+    file.close()
+    if 'Authentication succeeded' in content:
+        return True
+    else:
+        return False
 
 def doPingAvr(target, interface, count):
     proc = subprocess.Popen(['ping', ''.join(['-c', str(count)]), '-I', interface, target], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
