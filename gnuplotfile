@@ -7,7 +7,7 @@ set timefmt "%H:%M:%S"
 set format x "%H:%M"
 set xdata time
 set xrange ["06:50:00":"20:10:00"]
-set yrange [0:30]
+set yrange [0:5]
 unset colorbox
 set style fill solid 1
 set boxwidth 30
