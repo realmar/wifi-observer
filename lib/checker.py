@@ -67,7 +67,7 @@ def checkSSID(ssid, encrypted, config, logdir):
     time_end = time.time();
     sanity['time_needed_dhcp'] = time_end - time_start
 
-    sanity['errors'] = collectErrors(ssid, logdir)
+    sanity['errors'] = collectErrors(ssid, logdir + '/' + ssid + '.tmplog')
 
     if is_failed:
         sanity['ping_average'] = 0

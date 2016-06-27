@@ -39,7 +39,7 @@ def writeCheck(db_conn, sanity, timeouts):
             entries = executeSQL(db_conn, sql_string, info)
             code['id'] = info['id']
             commit(db_conn)
-        else
+        else:
             code['id'] = entries[0][0]
 
     sql_string = 'INSERT INTO data(time_needed_conn, time_needed_dhcp, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + str(time_needed_conn) + ', ' + str(time_needed_dhcp) + ', ' + str(ping_average) + ', ' + str(int(sanity['time_start'])) + ', ' + str(sanity['dbm']) + ', ' + str(ssid_id) + ', ' + str(bssid_id) + ')'
