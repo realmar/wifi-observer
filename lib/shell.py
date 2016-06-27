@@ -142,3 +142,20 @@ def confDefaultGW(interface, gw):
     syslog(LOG_INFO, decodeUTF8(proc.communicate()))
     proc = subprocess.Popen(['ip', 'route', 'add', 'default', 'via', gw, 'dev', interface], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     syslog(LOG_INFO, decodeUTF8(proc.communicate()))
+
+def collectErrors(ssid, log):
+    codes = [
+        'CTRL-EVENT-EAP-FAILURE'
+    ]
+
+    file = open(log, 'r')
+    content = file.read()
+    file.close()
+
+    errors = []
+
+    for code in codes:
+        if code in content:
+            errors.append({ 'code' : code, 'id' : 0 })
+
+    return errors

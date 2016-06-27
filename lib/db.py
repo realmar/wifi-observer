@@ -30,12 +30,29 @@ def writeCheck(db_conn, sanity, timeouts):
     if time_needed_dhcp != 'NULL':
         time_needed_dhcp = str("{0:.5f}".format(float(time_needed_dhcp)))
 
+    for code in sanity['errors']:
+        sql_string = 'SELECT id FROM errors WHERE code="' + code['code'] + '"'
+        entries = executeSQL(db_conn, sql_string)
+        if len(entries) == 0:
+            sql_string = 'INSERT INTO  errors(code) VALUES(' + code['code'] + ')'
+            info = {}
+            entries = executeSQL(db_conn, sql_string, info)
+            code['id'] = info['id']
+            commit(db_conn)
+        else
+            code['id'] = entries[0][0]
+
     sql_string = 'INSERT INTO data(time_needed_conn, time_needed_dhcp, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + str(time_needed_conn) + ', ' + str(time_needed_dhcp) + ', ' + str(ping_average) + ', ' + str(int(sanity['time_start'])) + ', ' + str(sanity['dbm']) + ', ' + str(ssid_id) + ', ' + str(bssid_id) + ')'
 
     info = {}
     entries = executeSQL(db_conn, sql_string, info)
 
     commit(db_conn)
+
+    for code in sanity['errors']:
+        sql_string = 'INSERT INTO errors_data(data_fk, error_fk), VALUES(' + info['id'] + ', ' + code['id'] + ')'
+        executeSQL(db_conn, sql_string)
+        commit(db_conn)
 
     return info['id']
 
