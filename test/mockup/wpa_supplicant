@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+
+AUTH_SUCC = 'Authentication succeeded'
+LINK = 'CTRL-EVENT-CONNECTED'
+AUTH_FAIL = 'CTRL-EVENT-EAP-FAILURE'
+
+print("sample text " + AUTH_FAIL + " sample text")
