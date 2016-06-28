@@ -2,6 +2,7 @@
 *.log
 *__pycache__*
 *.db
+*.db.old
 *tmp*
 *.svg
 nohup.out

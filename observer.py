@@ -9,16 +9,15 @@ import sys
 BASE_DIR = '/opt/wifi-observer'
 sys.path.append(BASE_DIR)
 
-import yaml
-import os
-import time
-import datetime
+import yaml, os, time, datetime
 
 from multiprocessing import Process
 from syslog import syslog, LOG_INFO
 
 from lib.db import connectDB, writeCheck
 from lib.checker import checkSSID
+from lib.utils import configIntegrity
+from lib.exceptions import InvalidConfig
 
 # configuration
 CONFIG =  os.path.join(BASE_DIR, 'wifi-observer.conf')
@@ -26,6 +25,12 @@ CONFIG =  os.path.join(BASE_DIR, 'wifi-observer.conf')
 file = open(CONFIG, 'r')
 config = yaml.load(file)
 file.close()
+
+try:
+    configIntegrity(config)
+except InvalidConfig as e:
+    print(e)
+    sys.exit()
 
 DB = os.path.join(BASE_DIR, config['database'])
 db_connection = connectDB(DB)
