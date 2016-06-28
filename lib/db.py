@@ -4,7 +4,7 @@
 #!/usr/bin/env python3.4
 
 import sqlite3, csv
-from syslog import syslog, LOG_INFO
+from syslog import syslog, LOG_INFO, LOG_ERR
 
 def connectDB(db):
     return sqlite3.connect(db, 20)
@@ -32,12 +32,16 @@ def writeCheck(**kwargs):
 
     for code in kwargs.get('sanity')['errors']:
         sql_string = 'SELECT id FROM errors WHERE code="' + code['code'] + '"'
-        entries = executeSQL(kwargs.get('db_conn'), sql_string)
+        try: entries = executeSQL(kwargs.get('db_conn'), sql_string)
+        except: return True
+
         fentries = entries.fetchall()
         if len(fentries) == 0:
             sql_string = 'INSERT INTO  errors(code) VALUES("' + code['code'] + '")'
             info = {}
-            entries = executeSQL(kwargs.get('db_conn'), sql_string, info)
+            try: entries = executeSQL(kwargs.get('db_conn'), sql_string, info)
+            except: return True
+
             code['id'] = info['id']
             commit(kwargs.get('db_conn'))
         else:
@@ -45,12 +49,15 @@ def writeCheck(**kwargs):
 
     location_id = '0';
     sql_string = 'SELECT id FROM locations WHERE location="' + kwargs.get('location') + '"'
-    entries = executeSQL(kwargs.get('db_conn'), sql_string)
+    try: entries = executeSQL(kwargs.get('db_conn'), sql_string)
+    except: return True
+
     lentries = entries.fetchall()
     if len(lentries) == 0:
         sql_string = 'INSERT INTO locations(location) VALUES("' + kwargs.get('location') + '")'
         linfo = {}
-        executeSQL(kwargs.get('db_conn'), sql_string, linfo)
+        try: executeSQL(kwargs.get('db_conn'), sql_string, linfo)
+        except: return True
         location_id = linfo['id']
     else:
         location_id = lentries[0][0]
@@ -58,20 +65,23 @@ def writeCheck(**kwargs):
     sql_string = 'INSERT INTO data(time_needed_conn, time_needed_dhcp, ping_average, time_start, dbm, ssid_fk, bssid_fk, location_fk) VALUES(' + str(time_needed_conn) + ', ' + str(time_needed_dhcp) + ', ' + str(ping_average) + ', ' + str(int(kwargs.get('sanity')['time_start'])) + ', ' + str(kwargs.get('sanity')['dbm']) + ', ' + str(ssid_id) + ', ' + str(bssid_id) + ',' + str(location_id) + ')'
 
     info = {}
-    entries = executeSQL(kwargs.get('db_conn'), sql_string, info)
+    try: entries = executeSQL(kwargs.get('db_conn'), sql_string, info)
+    except: return True
 
     commit(kwargs.get('db_conn'))
 
     for code in kwargs.get('sanity')['errors']:
         sql_string = 'INSERT INTO errors_data(data_fk, error_fk) VALUES(' + str(info['id']) + ', ' + str(code['id']) + ')'
-        executeSQL(kwargs.get('db_conn'), sql_string)
+        try: executeSQL(kwargs.get('db_conn'), sql_string)
+        except: return True
         commit(kwargs.get('db_conn'))
 
     return info['id']
 
 def checkEntry(db_conn, table, column, search):
     sql_string = 'SELECT id FROM ' + table + ' WHERE ' + column + '="' + search + '"'
-    entries = executeSQL(db_conn, sql_string)
+    try: entries = executeSQL(db_conn, sql_string)
+    except: return True
 
     for entry in entries.fetchall():
         return entry[0]
@@ -82,7 +92,8 @@ def checkEntry(db_conn, table, column, search):
 
 def insertSingle(db_conn, table, column, value):
     sql_string = 'INSERT INTO ' + table + '(' + column + ')' + ' VALUES("' + str(value) + '")'
-    entries = executeSQL(db_conn, sql_string)
+    try: entries = executeSQL(db_conn, sql_string)
+    except: return True
     commit(db_conn)
 
     return False
@@ -91,7 +102,8 @@ def getAllDates(db_path):
     db_conn = connectDB(db_path)
 
     sql_string = 'SELECT DISTINCT date(time_start, "unixepoch", "localtime", "start of day") FROM data'
-    entries = executeSQL(db_conn, sql_string)
+    try: entries = executeSQL(db_conn, sql_string)
+    except: return True
     final = entries.fetchall()
     db_conn.close()
     return final
@@ -102,7 +114,8 @@ def getSSIDs(db_path):
     final = []
 
     sql_string = 'SELECT id, ssid FROM ssids'
-    entries = executeSQL(db_conn, sql_string)
+    try: entries = executeSQL(db_conn, sql_string)
+    except: return True
     for entry in entries.fetchall():
         final.append({ 'name' : entry[1], 'where' : 'AND ssid_fk=' + str(entry[0]) })
     db_conn.close()
@@ -114,7 +127,8 @@ def getSSIDsName(db_path):
     final = []
 
     sql_string = 'SELECT ssid FROM ssids'
-    entries = executeSQL(db_conn, sql_string)
+    try: entries = executeSQL(db_conn, sql_string)
+    except: return True
     for entry in entries:
         final.append(entry[0])
     db_conn.close()
@@ -124,7 +138,8 @@ def getSSIDsName(db_path):
 def generateCSV(db_conn, csv_file, start, end):
     sql_string = 'select data.id, datetime(time_start, "unixepoch") as time_start_coll, time_needed_conn IS NOT NULL as time_needed_conn_null, time_needed_dhcp IS NOT NULL as time_needed_dhcp_null, ssids.ssid, bssids.bssid from data left join ssids on data.ssid_fk=ssids.id left join bssids on data.bssid_fk=bssids.id where cast(strftime("%W", time_start_coll) as integer) >= ' + start + ' and cast(strftime("%W", time_start_coll) as integer) <= ' + end + ' order by datetime(time_start, "unixepoch") asc'
 
-    entries = executeSQL(db_conn, sql_string)
+    try: entries = executeSQL(db_conn, sql_string)
+    except: return True
 
     ID = 0
     TIMESTAMP = 1
@@ -183,7 +198,8 @@ def getStats(db_path):
     types = [ 'ssid', 'bssid' ]
 
     sql_string = 'select date(time_start, "unixepoch", "localtime", "start of day") as time_start_coll, ssid_fk, ssids.ssid, bssid_fk, bssids.bssid, count(data.id),time_needed_dhcp IS NULL as time_needed_dhcp_null,time_needed_conn IS NULL as time_needed_conn_null from data left join ssids on data.ssid_fk=ssids.id left join bssids on data.bssid_fk=bssids.id group by ssid_fk,bssid_fk, time_needed_dhcp IS NULL, time_needed_conn IS NULL, date(time_start, "unixepoch", "localtime", "start of day") order by datetime(time_start, "unixepoch", "localtime", "start of day") desc'
-    entries = executeSQL(db_conn, sql_string)
+    try: entries = executeSQL(db_conn, sql_string)
+    except: return True
     for entry in entries.fetchall():
         for type in types:
             try: date_mapper[entry[DATE]]
@@ -264,7 +280,12 @@ def getStats(db_path):
     return [stats, glob_stats]
 
 def commit(db_conn):
-    db_conn.commit()
+    try:
+        db_conn.commit()
+    except sqlite3.Error as e:
+        print('sql error: ' + e.args[0])
+        syslog(LOG_ERR, 'sql error: ' + e.args[0])
+        raise e
 
 def executeSQL(db_conn, sql_string, add_information={}):
     c = db_conn.cursor()
@@ -273,8 +294,8 @@ def executeSQL(db_conn, sql_string, add_information={}):
         entries = c.execute(sql_string)
         add_information['id'] = c.lastrowid
     except sqlite3.Error as e:
-        print('sql error: ' + e.value)
-        syslog(LOG_ERR, 'sql error: ' + e.value)
-        return True
+        print('sql error: ' + e.args[0])
+        syslog(LOG_ERR, 'sql error: ' + e.args[0])
+        raise e
 
     return entries
