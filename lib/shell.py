@@ -13,13 +13,8 @@ def disconnectWiFi(interface, defaults):
     proc = subprocess.Popen(['killall', 'wpa_supplicant'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     syslog(LOG_INFO, decodeUTF8(proc.communicate()))
 
-    print("disconnect")
-
     proc = subprocess.Popen(['dhclient', '-r', interface], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     syslog(LOG_INFO, decodeUTF8(proc.communicate()))
-
-    # proc = subprocess.Popen(['iw', 'dev', interface, 'disconnect'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    # proc.communicate()
 
     proc = subprocess.Popen(['ip', 'link', 'set', interface, 'down'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     syslog(LOG_INFO, decodeUTF8(proc.communicate()))
@@ -28,13 +23,6 @@ def disconnectWiFi(interface, defaults):
 
 def connectWiFi(ssid, interface, wpa, logdir):
     proc = subprocess.Popen('wpa_supplicant -i ' + interface + ' -c ' + '/etc/wpa_supplicant-' + ssid + '.conf  > ' + logdir + '/' + ssid + '.tmplog &', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-
-    '''
-    if(wpa):
-        proc = subprocess.Popen('wpa_supplicant -i ' + interface + ' -c ' + '/etc/wpa_supplicant-' + ssid + '.conf  > ' + logdir + '/' + ssid + '.tmplog &', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-    else:
-        proc = subprocess.Popen('iw dev ' + interface + ' connect -w ' + ssid + ' > ' + logdir + '/' + ssid + '.tmplog &' , stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-    '''
 
 def initializeInterface(interface):
     proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -73,15 +61,6 @@ def checkConnection(interface, log):
         return True
     else:
         return False
-
-    # proc = subprocess.Popen(['iw', 'dev', interface, 'link'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    # out = proc.communicate()
-    # out = decodeUTF8(out)
-    # syslog(LOG_INFO, out)
-    # if 'Not connected' in out:
-    #     return False
-    # else:
-    #     return True
 
 def checkAuth(interface, log):
     try:
