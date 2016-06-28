@@ -31,6 +31,7 @@ function parse(data) {
         dhcp:      data.dhcp,
         ssid:      data.ssid,
         bssid:     data.bssid,
+        location:  data.location,
     };
 };
 
@@ -210,6 +211,7 @@ function visualize(data) {
             },
             function (d) { return d.ssid; },
             function (d) { return d.bssid; },
+            function (d) { return d.location; },
             function (d) { return d.id; }
         ])
         .sortBy(function (d) { return +d.id; })

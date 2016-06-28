@@ -136,7 +136,7 @@ def getSSIDsName(db_path):
     return final
 
 def generateCSV(db_conn, csv_file, start, end):
-    sql_string = 'select data.id, datetime(time_start, "unixepoch") as time_start_coll, time_needed_conn IS NOT NULL as time_needed_conn_null, time_needed_dhcp IS NOT NULL as time_needed_dhcp_null, ssids.ssid, bssids.bssid from data left join ssids on data.ssid_fk=ssids.id left join bssids on data.bssid_fk=bssids.id where cast(strftime("%W", time_start_coll) as integer) >= ' + start + ' and cast(strftime("%W", time_start_coll) as integer) <= ' + end + ' order by datetime(time_start, "unixepoch") asc'
+    sql_string = 'select data.id, datetime(time_start, "unixepoch") as time_start_coll, time_needed_conn IS NOT NULL as time_needed_conn_null, time_needed_dhcp IS NOT NULL as time_needed_dhcp_null, ssids.ssid, bssids.bssid, locations.location from data left join ssids on data.ssid_fk=ssids.id left join bssids on data.bssid_fk=bssids.id left join locations on data.location_fk=locations.id where cast(strftime("%W", time_start_coll) as integer) >= ' + start + ' and cast(strftime("%W", time_start_coll) as integer) <= ' + end + ' order by datetime(time_start, "unixepoch") asc'
 
     try: entries = executeSQL(db_conn, sql_string)
     except: return True
@@ -147,13 +147,14 @@ def generateCSV(db_conn, csv_file, start, end):
     DHCP_NULL = 3
     SSID = 4
     BSSID = 5
+    LOCATION = 6
 
     with open(csv_file, 'w') as cf:
-        fieldnames = [ 'id', 'timestamp', 'conn', 'dhcp', 'ssid', 'bssid' ]
+        fieldnames = [ 'id', 'timestamp', 'conn', 'dhcp', 'ssid', 'bssid', 'location' ]
         writer = csv.DictWriter(cf, fieldnames=fieldnames)
         writer.writeheader()
-        for entry in entries:
-            writer.writerow({'id' : entry[ID], 'timestamp' : entry[TIMESTAMP], 'conn' : entry[CONN_NULL], 'dhcp' : entry[DHCP_NULL], 'ssid' : entry[SSID], 'bssid' : entry[BSSID]})
+        for entry in entries.fetchall():
+            writer.writerow({'id' : entry[ID], 'timestamp' : entry[TIMESTAMP], 'conn' : entry[CONN_NULL], 'dhcp' : entry[DHCP_NULL], 'ssid' : entry[SSID], 'bssid' : entry[BSSID], 'location' : entry[LOCATION]})
 
 def getStats(db_path):
     db_conn = connectDB(db_path)
