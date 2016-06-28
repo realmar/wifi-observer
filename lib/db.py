@@ -9,51 +9,63 @@ from syslog import syslog, LOG_INFO
 def connectDB(db):
     return sqlite3.connect(db, 20)
 
-def writeCheck(db_conn, sanity, timeouts):
-    bssid_id = sanity['bssid']
+def writeCheck(**kwargs):
+    bssid_id = kwargs.get('sanity')['bssid']
 
     if bssid_id != 'NULL':
-        if(not checkEntry(db_conn, 'bssids', 'bssid', sanity['bssid'])):
-            insertSingle(db_conn, 'bssids', 'bssid', sanity['bssid'])
-        bssid_id = checkEntry(db_conn, 'bssids', 'bssid', sanity['bssid'])
+        if(not checkEntry(kwargs.get('db_conn'), 'bssids', 'bssid', kwargs.get('sanity')['bssid'])):
+            insertSingle(kwargs.get('db_conn'), 'bssids', 'bssid', kwargs.get('sanity')['bssid'])
+        bssid_id = checkEntry(kwargs.get('db_conn'), 'bssids', 'bssid', kwargs.get('sanity')['bssid'])
 
-    if(not checkEntry(db_conn, 'ssids', 'ssid', sanity['ssid'])):
-        insertSingle(db_conn, 'ssids', 'ssid', sanity['ssid'])
-    ssid_id = checkEntry(db_conn, 'ssids', 'ssid', sanity['ssid'])
+    if(not checkEntry(kwargs.get('db_conn'), 'ssids', 'ssid', kwargs.get('sanity')['ssid'])):
+        insertSingle(kwargs.get('db_conn'), 'ssids', 'ssid', kwargs.get('sanity')['ssid'])
+    ssid_id = checkEntry(kwargs.get('db_conn'), 'ssids', 'ssid', kwargs.get('sanity')['ssid'])
 
-    time_needed_conn = 'NULL' if sanity['time_needed_conn'] > timeouts['conn'] else sanity['time_needed_conn']
-    time_needed_dhcp = 'NULL' if sanity['time_needed_dhcp'] > timeouts['dhcp'] or time_needed_conn == 'NULL' else sanity['time_needed_dhcp']
-    ping_average = 'NULL' if sanity['ping_average'] == 0 else str(sanity['ping_average'])
+    time_needed_conn = 'NULL' if kwargs.get('sanity')['time_needed_conn'] > kwargs.get('timeouts')['conn'] else kwargs.get('sanity')['time_needed_conn']
+    time_needed_dhcp = 'NULL' if kwargs.get('sanity')['time_needed_dhcp'] > kwargs.get('timeouts')['dhcp'] or time_needed_conn == 'NULL' else kwargs.get('sanity')['time_needed_dhcp']
+    ping_average = 'NULL' if kwargs.get('sanity')['ping_average'] == 0 else str(kwargs.get('sanity')['ping_average'])
 
     if time_needed_conn != 'NULL':
         time_needed_conn = str("{0:.5f}".format(float(time_needed_conn)))
     if time_needed_dhcp != 'NULL':
         time_needed_dhcp = str("{0:.5f}".format(float(time_needed_dhcp)))
 
-    for code in sanity['errors']:
+    for code in kwargs.get('sanity')['errors']:
         sql_string = 'SELECT id FROM errors WHERE code="' + code['code'] + '"'
-        entries = executeSQL(db_conn, sql_string)
+        entries = executeSQL(kwargs.get('db_conn'), sql_string)
         fentries = entries.fetchall()
         if len(fentries) == 0:
             sql_string = 'INSERT INTO  errors(code) VALUES("' + code['code'] + '")'
             info = {}
-            entries = executeSQL(db_conn, sql_string, info)
+            entries = executeSQL(kwargs.get('db_conn'), sql_string, info)
             code['id'] = info['id']
-            commit(db_conn)
+            commit(kwargs.get('db_conn'))
         else:
             code['id'] = fentries[0][0]
 
-    sql_string = 'INSERT INTO data(time_needed_conn, time_needed_dhcp, ping_average, time_start, dbm, ssid_fk, bssid_fk) VALUES(' + str(time_needed_conn) + ', ' + str(time_needed_dhcp) + ', ' + str(ping_average) + ', ' + str(int(sanity['time_start'])) + ', ' + str(sanity['dbm']) + ', ' + str(ssid_id) + ', ' + str(bssid_id) + ')'
+    location_id = '0';
+    sql_string = 'SELECT id FROM locations WHERE location="' + kwargs.get('location') + '"'
+    entries = executeSQL(kwargs.get('db_conn'), sql_string)
+    lentries = entries.fetchall()
+    if len(lentries) == 0:
+        sql_string = 'INSERT INTO locations(location) VALUES("' + kwargs.get('location') + '")'
+        linfo = {}
+        executeSQL(kwargs.get('db_conn'), sql_string, linfo)
+        location_id = linfo['id']
+    else:
+        location_id = lentries[0][0]
+
+    sql_string = 'INSERT INTO data(time_needed_conn, time_needed_dhcp, ping_average, time_start, dbm, ssid_fk, bssid_fk, location_fk) VALUES(' + str(time_needed_conn) + ', ' + str(time_needed_dhcp) + ', ' + str(ping_average) + ', ' + str(int(kwargs.get('sanity')['time_start'])) + ', ' + str(kwargs.get('sanity')['dbm']) + ', ' + str(ssid_id) + ', ' + str(bssid_id) + ',' + str(location_id) + ')'
 
     info = {}
-    entries = executeSQL(db_conn, sql_string, info)
+    entries = executeSQL(kwargs.get('db_conn'), sql_string, info)
 
-    commit(db_conn)
+    commit(kwargs.get('db_conn'))
 
-    for code in sanity['errors']:
+    for code in kwargs.get('sanity')['errors']:
         sql_string = 'INSERT INTO errors_data(data_fk, error_fk) VALUES(' + str(info['id']) + ', ' + str(code['id']) + ')'
-        executeSQL(db_conn, sql_string)
-        commit(db_conn)
+        executeSQL(kwargs.get('db_conn'), sql_string)
+        commit(kwargs.get('db_conn'))
 
     return info['id']
 

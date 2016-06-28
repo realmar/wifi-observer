@@ -35,7 +35,7 @@ def executeCheck():
     for ssid in config['checks']['ssids'].keys():
         sanity = checkSSID(config['checks']['ssids'][ssid]['name'], config['checks']['ssids'][ssid]['encrypted'], config, BASE_DIR + '/log')
 
-        id = writeCheck(db_connection, sanity, {'conn' : config['checks']['failed_conn'], 'dhcp' : config['checks']['failed_dhcp']})
+        id = writeCheck(db_conn=db_connection, sanity=sanity, timeouts={'conn' : config['checks']['failed_conn'], 'dhcp' : config['checks']['failed_dhcp']}, location=config['computer']['location'])
 
         try:
             file = open(BASE_DIR + '/log/' + ssid + '.tmplog', 'r')

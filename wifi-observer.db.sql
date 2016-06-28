@@ -21,8 +21,10 @@ CREATE TABLE  data (
   dbm                 INTEGER NULL,
   ssid_fk             INTEGER UNSIGNED NOT NULL,
   bssid_fk            INTEGER UNSIGNED NULL,
+  location_fk         INTEGER UNSIGNED NULL,
   FOREIGN KEY(ssid_fk)  REFERENCES ssids(id),
-  FOREIGN KEY(bssid_fk) REFERENCES bssids(id)
+  FOREIGN KEY(bssid_fk) REFERENCES bssids(id),
+  FOREIGN KEY(location_fk) REFERENCES locations(id)
 );
 
 CREATE TABLE errors (
@@ -34,4 +36,9 @@ CREATE TABLE errors_data (
   id        INTEGER PRIMARY KEY AUTOINCREMENT,
   data_fk   INTEGER UNSIGNED NOT NULL,
   error_fk  INTEGER UNSIGNED NOT NULL
+);
+
+CREATE TABLE locations (
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  location  VARCHAR(200)
 );
