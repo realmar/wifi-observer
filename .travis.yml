@@ -18,5 +18,5 @@ notifications:
     on_success: always
     on_failure: always
 
-  after_success:
-    - coveralls
+after_success:
+  - coveralls
