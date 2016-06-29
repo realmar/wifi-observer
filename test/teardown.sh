@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASE='/opt/wifi-observer'
+# BASE='/opt/wifi-observer'
 
 rm $BASE/wifi-observer.db.mock
 rm $BASE/test/temp/*
