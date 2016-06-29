@@ -2,5 +2,5 @@
 
 # BASE='/opt/wifi-observer'
 
-export PATH=$PATH:$BASE/test/mockup
+export PATH=$BASE/test/mockup:$PATH
 sqlite3 $BASE/wifi-observer.db.mock < $BASE/wifi-observer.db.sql

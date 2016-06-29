@@ -1,5 +1,3 @@
 #!/usr/bin/env python3
 
-
-
 print('Connected to cc:3e:5f:b0:e0:73 (on wlan0)\nSSID: public\nfreq: 2437\nsignal: -57 dBm\ntx bitrate: 144.4 MBit/s')

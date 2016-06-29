@@ -1,0 +1,3 @@
+#!/usr/bin/env python3
+
+print('PING heustock.ethz.ch (129.132.86.210) 56(84) bytes of data.\n64 bytes from heustock.ethz.ch (129.132.86.210): icmp_seq=1 ttl=56 time=3.90 ms\n64 bytes from heustock.ethz.ch (129.132.86.210): icmp_seq=2 ttl=56 time=4.82 ms\n64 bytes from heustock.ethz.ch (129.132.86.210): icmp_seq=3 ttl=59 time=0.975 ms\n64 bytes from heustock.ethz.ch (129.132.86.210): icmp_seq=4 ttl=59 time=0.958 ms\n64 bytes from heustock.ethz.ch (129.132.86.210): icmp_seq=5 ttl=59 time=0.840 ms\n\n--- heustock.ethz.ch ping statistics ---\n5 packets transmitted, 5 received, 0% packet loss, time 4004ms\nrtt min/avg/max/mdev = 0.840/2.999/4.820/1.710 ms')
