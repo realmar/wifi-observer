@@ -102,7 +102,7 @@ Run the testsuite:
 $ export BASE=<root-wifi-observer>
 
 $ cd <root-wifi-observer>
-$ bash test/setup.#!/bin/sh
+$ bash test/setup.sh
 $ nosetests3 --with-coverage --cover-package=lib.checker,lib.db,lib.exceptions,lib.shell,lib.utils
 $ bash test/teardown.sh
 ```
