@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/realm01/wifi-observer.svg?branch=master)](https://travis-ci.org/realm01/wifi-observer)
+[![Coverage Status](https://coveralls.io/repos/github/realm01/wifi-observer/badge.svg?branch=master)](https://coveralls.io/github/realm01/wifi-observer?branch=master)
+
 wifi-observer
 =============
 Description
@@ -102,10 +105,13 @@ Run the testsuite:
 $ export BASE=<root-wifi-observer>
 
 $ cd <root-wifi-observer>
-$ bash test/setup.sh
-$ nosetests3 --with-coverage --cover-package=lib.checker,lib.db,lib.exceptions,lib.shell,lib.utils
+$ source test/setup.sh
+$ coverage run setup.py test
 $ bash test/teardown.sh
 ```
+
+### Continuous Integration
+Every time there is a commit Travis CI will automatically run the test suite and report back to coveralls, to generate the coverage statistics.
 
 Contributors
 ------------
