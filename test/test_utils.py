@@ -6,97 +6,189 @@ from lib.exceptions import InvalidConfig
 
 config = {}
 
-def test_configIntegrity_db():
+def test_01_configIntegrity_db():
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['database'] = 'sampletext'
+    except InvalidConfig as e: assert True
+    else: assert False
 
-def test_configIntegrity_computer():
+def test_02_configIntegrity_computer():
+    config['database'] = 'sampletext'
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['computer'] = {}
+    except InvalidConfig as e: assert True
+    else: assert False
 
-def test_configIntegrity_computer_location():
+def test_03_configIntegrity_computer_location():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['computer']['location'] = 'sampletext'
+    except InvalidConfig as e: assert True
+    else: assert False
 
-def test_configIntegrity_default_net():
+def test_04_configIntegrity_default_net():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
+    config['computer']['location'] = 'sampletext'
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['default_net'] = {}
+    except InvalidConfig as e: assert True
+    else: assert False
 
-def test_configIntegrity_def_if():
+def test_05_configIntegrity_def_if():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
+    config['computer']['location'] = 'sampletext'
+    config['default_net'] = {}
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['default_net']['interface'] = 'sampletext'
+    except InvalidConfig as e: assert True
+    else: assert False
 
 
-def test_configIntegrity_def_gw():
+def test_06_configIntegrity_def_gw():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
+    config['computer']['location'] = 'sampletext'
+    config['default_net'] = {}
+    config['default_net']['interface'] = 'sampletext'
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['default_net']['gateway'] = 'sampletext'
+    except InvalidConfig as e: assert True
+    else: assert False
 
 
-def test_configIntegrity_chks():
+def test_07_configIntegrity_chks():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
+    config['computer']['location'] = 'sampletext'
+    config['default_net'] = {}
+    config['default_net']['interface'] = 'sampletext'
+    config['default_net']['gateway'] = 'sampletext'
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['checks'] = {}
+    except InvalidConfig as e: assert True
+    else: assert False
 
 
-def test_configIntegrity_chks_interval():
+def test_08_configIntegrity_chks_interval():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
+    config['computer']['location'] = 'sampletext'
+    config['default_net'] = {}
+    config['default_net']['interface'] = 'sampletext'
+    config['default_net']['gateway'] = 'sampletext'
+    config['checks'] = {}
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['checks']['interval'] = 'sampletext'
+    except InvalidConfig as e: assert True
+    else: assert False
 
 
-def test_configIntegrity_chks_f_conn():
+def test_09_configIntegrity_chks_f_conn():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
+    config['computer']['location'] = 'sampletext'
+    config['default_net'] = {}
+    config['default_net']['interface'] = 'sampletext'
+    config['default_net']['gateway'] = 'sampletext'
+    config['checks'] = {}
+    config['checks']['interval'] = 'sampletext'
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['checks']['failed_conn'] = 'sampletext'
+    except InvalidConfig as e: assert True
+    else: assert False
 
 
-def test_configIntegrity_chks_f_dhcp():
+def test_10_configIntegrity_chks_f_dhcp():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
+    config['computer']['location'] = 'sampletext'
+    config['default_net'] = {}
+    config['default_net']['interface'] = 'sampletext'
+    config['default_net']['gateway'] = 'sampletext'
+    config['checks'] = {}
+    config['checks']['interval'] = 'sampletext'
+    config['checks']['failed_conn'] = 'sampletext'
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['checks']['failed_dhcp'] = 'sampletext'
+    except InvalidConfig as e: assert True
+    else: assert False
 
 
-def test_configIntegrity_chks_ping_c():
+def test_11_configIntegrity_chks_ping_c():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
+    config['computer']['location'] = 'sampletext'
+    config['default_net'] = {}
+    config['default_net']['interface'] = 'sampletext'
+    config['default_net']['gateway'] = 'sampletext'
+    config['checks'] = {}
+    config['checks']['interval'] = 'sampletext'
+    config['checks']['failed_conn'] = 'sampletext'
+    config['checks']['failed_dhcp'] = 'sampletext'
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['checks']['ping_c'] = 'sampletext'
+    except InvalidConfig as e: assert True
+    else: assert False
 
 
-def test_configIntegrity_ping_t():
+def test_12_configIntegrity_ping_t():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
+    config['computer']['location'] = 'sampletext'
+    config['default_net'] = {}
+    config['default_net']['interface'] = 'sampletext'
+    config['default_net']['gateway'] = 'sampletext'
+    config['checks'] = {}
+    config['checks']['interval'] = 'sampletext'
+    config['checks']['failed_conn'] = 'sampletext'
+    config['checks']['failed_dhcp'] = 'sampletext'
+    config['checks']['ping_c'] = 'sampletext'
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['checks']['ping_target'] = 'sampletext'
+    except InvalidConfig as e: assert True
+    else: assert False
 
 
-def test_configIntegrity_chks_ssids():
+def test_13_configIntegrity_chks_ssids():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
+    config['computer']['location'] = 'sampletext'
+    config['default_net'] = {}
+    config['default_net']['interface'] = 'sampletext'
+    config['default_net']['gateway'] = 'sampletext'
+    config['checks'] = {}
+    config['checks']['interval'] = 'sampletext'
+    config['checks']['failed_conn'] = 'sampletext'
+    config['checks']['failed_dhcp'] = 'sampletext'
+    config['checks']['ping_c'] = 'sampletext'
+    config['checks']['ping_target'] = 'sampletext'
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['checks']['ssids'] = []
+    except InvalidConfig as e: assert True
+    else: assert False
 
-def test_configIntegrity_chks_no_ssids():
+def test_14_configIntegrity_chks_no_ssids():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
+    config['computer']['location'] = 'sampletext'
+    config['default_net'] = {}
+    config['default_net']['interface'] = 'sampletext'
+    config['default_net']['gateway'] = 'sampletext'
+    config['checks'] = {}
+    config['checks']['interval'] = 'sampletext'
+    config['checks']['failed_conn'] = 'sampletext'
+    config['checks']['failed_dhcp'] = 'sampletext'
+    config['checks']['ping_c'] = 'sampletext'
+    config['checks']['ping_target'] = 'sampletext'
+    config['checks']['ssids'] = []
     try: configIntegrity(config)
-    except InvalidConfig as e: assert False
-    else: assert True
-config['checks']['ssids'] = ['sampletext', 'sampletext']
+    except InvalidConfig as e: assert True
+    else: assert False
 
-def test_configIntegrity_():
+def test_15_configIntegrity_():
+    config['database'] = 'sampletext'
+    config['computer'] = {}
+    config['computer']['location'] = 'sampletext'
+    config['default_net'] = {}
+    config['default_net']['interface'] = 'sampletext'
+    config['default_net']['gateway'] = 'sampletext'
+    config['checks'] = {}
+    config['checks']['interval'] = 'sampletext'
+    config['checks']['failed_conn'] = 'sampletext'
+    config['checks']['failed_dhcp'] = 'sampletext'
+    config['checks']['ping_c'] = 'sampletext'
+    config['checks']['ping_target'] = 'sampletext'
+    config['checks']['ssids'] = []
+    config['checks']['ssids'] = ['sampletext', 'sampletext']
+    print(config)
     assert configIntegrity(config) == True
