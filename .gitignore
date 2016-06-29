@@ -3,6 +3,7 @@
 *__pycache__*
 *.db
 *.db.old
+*.db.mock
 *tmp*
 *.svg
 nohup.out
@@ -10,3 +11,4 @@ nohup.out
 *.DS_Store
 *.csv
 *.nfs*
+.coverage
