@@ -106,3 +106,27 @@ $ bash test/setup.#!/bin/sh
 $ nosetests3 --with-coverage --cover-package=lib.checker,lib.db,lib.exceptions,lib.shell,lib.utils
 $ bash test/teardown.sh
 ```
+
+Contributors
+------------
+  - Anastassios Martakos
+  - Christian Herzog (gnuplotfile)
+  - Claude Becker (d3 diagrams)
+
+LICENSE
+-------
+> Observe the connectivity of your WiFi networks
+>     Copyright (C) 2016 Anastassios Martakos
+>
+> This program is free software: you can redistribute it and/or modify
+> it under the terms of the GNU General Public License as published by
+> the Free Software Foundation, either version 3 of the License, or
+> (at your option) any later version.
+>
+> This program is distributed in the hope that it will be useful,
+> but WITHOUT ANY WARRANTY; without even the implied warranty of
+> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> GNU General Public License for more details.
+>
+> You should have received a copy of the GNU General Public License
+> along with this program.  If not, see <http://www.gnu.org/licenses/>.
