@@ -1,0 +1,23 @@
+language: python
+python:
+  - "3.2"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+install:
+  - pip install -r requirements.txt
+
+script:
+  - export BASE=`pwd`
+  - source test/setup.sh
+  - nosetests3 --with-coverage --cover-package=lib.checker,lib.db,lib.exceptions,lib.shell,lib.utils
+
+notifications:
+  email:
+    receipients:
+      - anastassios.martakos@gmail.com
+    on_success: always
+    on_failure: always
+
+  after_success:
+    - coveralls
