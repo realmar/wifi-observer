@@ -10,7 +10,7 @@ install:
 script:
   - export BASE=`pwd`
   - source test/setup.sh
-  - nosetests3 --with-coverage --cover-package=lib.checker,lib.db,lib.exceptions,lib.shell,lib.utils
+  - nosetests --with-coverage --cover-package=lib.checker,lib.db,lib.exceptions,lib.shell,lib.utils
 
 notifications:
   email:
