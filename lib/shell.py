@@ -10,6 +10,8 @@ from lib.utils import decodeUTF8
 from time import sleep
 
 def disconnectWiFi(interface, defaults):
+    assert type(interface) == type('a')
+    assert type(defaults) == type({})
     proc = subprocess.Popen(['killall', 'wpa_supplicant'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     syslog(LOG_INFO, decodeUTF8(proc.communicate()))
 
@@ -21,8 +23,11 @@ def disconnectWiFi(interface, defaults):
 
     confDefaultGW(defaults['interface'], defaults['gateway'])
 
+    return True
+
 def connectWiFi(ssid, interface, wpa, logdir):
     proc = subprocess.Popen('wpa_supplicant -i ' + interface + ' -c ' + '/etc/wpa_supplicant-' + ssid + '.conf  > ' + logdir + '/' + ssid + '.tmplog &', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+    return True
 
 def initializeInterface(interface):
     proc = subprocess.Popen(['ip', 'link', 'set',  interface, 'up' ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -30,14 +35,17 @@ def initializeInterface(interface):
     sleep(4)
     proc = subprocess.Popen(['iw', 'dev',  interface, 'scan' ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     syslog(LOG_INFO, decodeUTF8(proc.communicate()))
+    return True
 
 def getIP(interface):
     proc = subprocess.Popen(['dhclient', interface], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     return proc.pid
 
 def killPID(pid):
+    assert type(pid) == type(42)
     proc = subprocess.Popen(['kill', '-9',  str(pid)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     syslog(LOG_INFO, decodeUTF8(proc.communicate()))
+    return True
 
 def checkIP(gw):
     proc = subprocess.Popen(['ip', 'a'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -121,8 +129,9 @@ def confDefaultGW(interface, gw):
     syslog(LOG_INFO, decodeUTF8(proc.communicate()))
     proc = subprocess.Popen(['ip', 'route', 'add', 'default', 'via', gw, 'dev', interface], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     syslog(LOG_INFO, decodeUTF8(proc.communicate()))
+    return True
 
-def collectErrors(ssid, log):
+def collectErrors(log):
     codes = [
         'CTRL-EVENT-EAP-FAILURE'
     ]

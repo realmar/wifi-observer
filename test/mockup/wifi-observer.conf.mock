@@ -1,0 +1,36 @@
+---
+database: wifi-observer.db
+
+computer:
+  location: HIT J 43.3
+
+wifi_net:
+  interface: wlan0
+
+default_net:
+  interface: p6p1
+  gateway: 192.33.96.1
+
+checks:
+  interval: 90
+  failed_conn: 15
+  failed_dhcp: 30
+  ping_c: 5
+  ping_target: heustock.ethz.ch
+  ssids:
+    eth:
+      name: eth
+      encrypted: True
+      gateway: 10.2.160.1
+    eth-5:
+      name: eth-5
+      encrypted: True
+      gateway: 10.2.160.1
+    public:
+      name: public
+      encrypted: False
+      gateway: 172.30.72.1
+    public-5:
+      name: public-5
+      encrypted: False
+      gateway: 172.30.72.1

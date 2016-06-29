@@ -12,7 +12,10 @@ def configIntegrity(config):
     if config.get('database') == None:
         raise InvalidConfig('Specify a database')
 
-    if config.get('computer') == None or config.get('computer').get('location') == None:
+    if config.get('computer') == None:
+        raise InvalidConfig('set computer location')
+
+    if config.get('computer').get('location') == None:
         raise InvalidConfig('set computer location')
 
     if config.get('default_net') == None:
@@ -47,3 +50,5 @@ def configIntegrity(config):
 
     if len(config.get('checks').get('ssids')) == 0:
         raise InvalidConfig('configure some ssids')
+
+    return True

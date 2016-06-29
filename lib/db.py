@@ -33,14 +33,14 @@ def writeCheck(**kwargs):
     for code in kwargs.get('sanity')['errors']:
         sql_string = 'SELECT id FROM errors WHERE code="' + code['code'] + '"'
         try: entries = executeSQL(kwargs.get('db_conn'), sql_string)
-        except: return True
+        except: return 'get error'
 
         fentries = entries.fetchall()
         if len(fentries) == 0:
             sql_string = 'INSERT INTO  errors(code) VALUES("' + code['code'] + '")'
             info = {}
             try: entries = executeSQL(kwargs.get('db_conn'), sql_string, info)
-            except: return True
+            except: return 'insert error'
 
             code['id'] = info['id']
             commit(kwargs.get('db_conn'))
@@ -50,14 +50,15 @@ def writeCheck(**kwargs):
     location_id = '0';
     sql_string = 'SELECT id FROM locations WHERE location="' + kwargs.get('location') + '"'
     try: entries = executeSQL(kwargs.get('db_conn'), sql_string)
-    except: return True
+    except: return 'get location'
 
     lentries = entries.fetchall()
     if len(lentries) == 0:
         sql_string = 'INSERT INTO locations(location) VALUES("' + kwargs.get('location') + '")'
         linfo = {}
         try: executeSQL(kwargs.get('db_conn'), sql_string, linfo)
-        except: return True
+        except: return 'insert location'
+        commit(kwargs.get('db_conn'))
         location_id = linfo['id']
     else:
         location_id = lentries[0][0]
@@ -66,14 +67,15 @@ def writeCheck(**kwargs):
 
     info = {}
     try: entries = executeSQL(kwargs.get('db_conn'), sql_string, info)
-    except: return True
+    except: return 'insert main'
 
     commit(kwargs.get('db_conn'))
+
 
     for code in kwargs.get('sanity')['errors']:
         sql_string = 'INSERT INTO errors_data(data_fk, error_fk) VALUES(' + str(info['id']) + ', ' + str(code['id']) + ')'
         try: executeSQL(kwargs.get('db_conn'), sql_string)
-        except: return True
+        except: return 'insert errrors_data'
         commit(kwargs.get('db_conn'))
 
     return info['id']
