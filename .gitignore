@@ -11,4 +11,5 @@ nohup.out
 *.DS_Store
 *.csv
 *.nfs*
-.coverage
+*.coverage
+*.egg-info
