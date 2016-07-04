@@ -1,7 +1,7 @@
-var colors_red    = ['#FF545A'];
+var colors_red    = ['#F44336'];
 var colors_rg     = ['#D62728', '#2CA02C'];
 var colors_rgg    = ['#D62728', '#2CA02C', '#7F7F7F'];
-var colors_duo    = ['#1F77B4', '#9ADA81'];
+var colors_ssids    = ['#7B1FA2', '#2CA02C', '#F57C00', '#1976D2'];
 var colors_custom = '#7F7F7F #1F77B4 #9467BD #8C564B #E377C2 #17BECF #FF7F0E #BCBD22'.split(' ');
 var date_format   = d3.time.format.utc('%Y-%m-%d %H:%M:%S');
 
@@ -115,7 +115,7 @@ function visualize(data) {
         .height(250)
         .dimension(dim_ssid)
         .group(group_ssid)
-        .ordinalColors(colors_duo)
+        .ordinalColors(colors_ssids)
         .label(function(d) { return d.key; })
         .title(function(d) { return d.value; });
 
