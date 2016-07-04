@@ -35,7 +35,7 @@ function parse(data) {
     };
 };
 
-var group_conn, group_dhcp, group_ssid, group_bssid, group_const, group_conn_fails, group_dhcp_fails;
+var group_conn, group_dhcp, group_ssid, group_bssid, group_const, group_conn_fails, group_dhcp_fails, group_location;
 
 function visualize(data) {
 
@@ -55,6 +55,7 @@ function visualize(data) {
     dim_ssid  = cf.dimension(function(d) { return d.ssid; });
     dim_bssid = cf.dimension(function(d) { if(!(d.dhcp == '1' && d.conn == '0')) { return d.bssid; } else { return 3; } });
     dim_hour  = cf.dimension(function(d) { return d3.time.hour(d.timestamp); });
+    dim_location = cf.dimension(function(d) { return d.location; })
 
     group_conn  = dim_conn.group().reduceCount();
     group_dhcp  = dim_dhcp.group().reduceCount();
@@ -77,6 +78,7 @@ function visualize(data) {
             return 0;
 	      }
     });
+    group_location = dim_location.group().reduceCount();
 
     var timerange = [d3.min(data,function(d){return d.timestamp}), d3.max(data,function(d){return d.timestamp})];
 
@@ -137,6 +139,18 @@ function visualize(data) {
         .elasticX(false)
         .x(d3.scale.log().clamp(true).domain([1, 15000]).range([0,350]).nice())
         .xAxis().ticks(4);
+
+      dc.rowChart("#rowchart-location")
+          .width(350)
+          .height(100)
+          .dimension(dim_location)
+          .group(group_location)
+          .ordinalColors(colors_custom)
+          .labelOffsetX(5)
+          .title(function(d) { return d.location; })     // here we remove the offset set above
+          .elasticX(false)
+          .x(d3.scale.log().clamp(true).domain([1, 15000]).range([0,350]).nice())
+          .xAxis().ticks(4);
 
     var conntime = dc.lineChart("#linechart-conn-time");
     conntime
