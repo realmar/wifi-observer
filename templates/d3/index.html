@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8"/>
         <title>wifi observer</title>
-        <link rel="stylesheet" href="/static/d3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link rel="stylesheet" href="/static/d3/css/dc.min.css">
         <style>
           .inline {
@@ -18,6 +18,7 @@
         <script src="/static/d3/js/d3.min.js"></script>
         <script src="/static/d3/js/crossfilter.min.js"></script>
         <script src="/static/d3/js/dc.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <style>
             #linechart-conn-time, #linechart-dhcp-time {
                 margin-top: -20px;
@@ -77,33 +78,33 @@
             </div>
             <div style="clear:both;"></div>
 
-            <div>
+            <div class="inline">
                 <h4>BSSID</h4>
                 <div id="rowchart-bssid"></div>
             </div>
-            <div>
+            <div class="inline">
                 <h4>Connection</h4>
                 <div id="piechart-conn"></div>
             </div>
-            <div>
+            <div class="inline">
                 <h4>DHCP</h4>
                 <div id="piechart-dhcp"></div>
             </div>
-            <div>
+            <div class="inline">
                 <h4>SSID</h4>
                 <div id="piechart-ssid"></div>
             </div>
             <div style="clear:both;"></div>
 
             <div>
-                <h4>Failed Connections / Hour</h4>
+                <h4>Failed Connections / Hour <span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Connection attempts which run into a timeout ({{ timeout_conn }} s)"></span></h4>
                 <div id="linechart-conn-failure"></div>
                 <div id="linechart-conn-time"></div>
             </div>
             <div style="clear:both;"></div>
 
             <div>
-                <h4>Failed DHCP / Hour</h4>
+                <h4>Failed DHCP / Hour <span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="DHCP attempts which run into a timeout ({{ timeout_dhcp }} s)"></span></h4>
                 <div id="linechart-dhcp-failure"></div>
                 <div id="linechart-dhcp-time"></div>
             </div>
@@ -123,6 +124,11 @@
                 </thead>
             </table>
         </div>
+        <script>
+          $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+          });
+        </script>
         <script src="/static/d3/js/graph_builder.js"></script>
     </body>
 </html>

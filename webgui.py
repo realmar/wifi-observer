@@ -39,17 +39,17 @@ def differentiate():
 def d3():
     current_week = datetime.datetime.today().strftime('%W')
     current_year = datetime.datetime.today().strftime('%Y')
-    return renderD3(int(current_week), int(current_year))
+    return renderD3(int(current_week), int(current_year), config['checks']['failed_conn'], config['checks']['failed_dhcp'])
 
 @app.route("/d3/<year>/<end>")
 def d3_cust(year, end):
-    return renderD3(int(end), int(year))
+    return renderD3(int(end), int(year), config['checks']['failed_conn'], config['checks']['failed_dhcp'])
 
 @app.route("/get/<date>")
 def getSVG(date):
     return app.send_static_file(date + '.svg')
 
-def renderD3(current_week, current_year):
+def renderD3(current_week, current_year, t_c, t_d):
     next_year = current_year
     previous_year = current_year
     next_week = current_week + 1
@@ -62,7 +62,7 @@ def renderD3(current_week, current_year):
         previous_week = 52 - abs(current_week - 1)
         previous_year = current_year - 1
 
-    return render_template('d3/index.html', week={ 'start' : current_week - 1, 'end' : current_week, 'next' : next_week, 'prev' : previous_week, 'next_year' : next_year, 'previous_year' : previous_year, 'year' : current_year })
+    return render_template('d3/index.html', week={ 'start' : current_week - 1, 'end' : current_week, 'next' : next_week, 'prev' : previous_week, 'next_year' : next_year, 'previous_year' : previous_year, 'year' : current_year }, timeout_conn=t_c, timeout_dhcp=t_d)
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=False, host='0.0.0.0')
