@@ -26,7 +26,7 @@ def disconnectWiFi(interface, defaults):
     return True
 
 def connectWiFi(ssid, interface, wpa, logdir):
-    proc = subprocess.Popen('wpa_supplicant -i ' + interface + ' -c ' + '/etc/wpa_supplicant-' + ssid + '.conf  > ' + logdir + '/' + ssid + '.tmplog &', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+    proc = subprocess.Popen('wpa_supplicant -dd -i ' + interface + ' -c ' + '/etc/wpa_supplicant-' + ssid + '.conf  > ' + logdir + '/' + ssid + '.tmplog &', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
     return True
 
 def initializeInterface(interface):
