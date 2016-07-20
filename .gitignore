@@ -13,3 +13,4 @@ nohup.out
 *.nfs*
 *.coverage
 *.egg-info
+*.log.*.gz
