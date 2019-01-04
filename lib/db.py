@@ -47,7 +47,7 @@ def writeCheck(**kwargs):
         else:
             code['id'] = fentries[0][0]
 
-    location_id = '0';
+    location_id = '0'
     sql_string = 'SELECT id FROM locations WHERE location="' + kwargs.get('location') + '"'
     try: entries = executeSQL(kwargs.get('db_conn'), sql_string)
     except: return 'get location'

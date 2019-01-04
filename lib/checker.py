@@ -20,7 +20,7 @@ def checkSSID(ssid, encrypted, config, logdir):
 
     initializeInterface(config['wifi_net']['interface'])
 
-    time_start = time.time();
+    time_start = time.time()
     sanity['time_start'] = time_start
 
     connectWiFi(ssid, config['wifi_net']['interface'], encrypted, logdir)
@@ -41,12 +41,12 @@ def checkSSID(ssid, encrypted, config, logdir):
         if checkConnection(config['wifi_net']['interface'], logdir + '/' + ssid + '.tmplog'):
             break
 
-    time_end = time.time();
+    time_end = time.time()
     sanity['time_needed_conn'] = time_end - time_start
 
     time.sleep(4)
 
-    time_start = time.time();
+    time_start = time.time()
     if not is_failed:
         sanity['bssid'] = getBSSID(config['wifi_net']['interface'])
         sanity['dbm'] = getDBM(config['wifi_net']['interface'])
@@ -64,7 +64,7 @@ def checkSSID(ssid, encrypted, config, logdir):
         sanity['bssid'] = 'NULL'
         sanity['dbm'] = 'NULL'
 
-    time_end = time.time();
+    time_end = time.time()
     sanity['time_needed_dhcp'] = time_end - time_start
 
     sanity['errors'] = collectErrors(logdir + '/' + ssid + '.tmplog')

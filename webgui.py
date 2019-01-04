@@ -53,7 +53,7 @@ def renderD3(current_week, current_year, t_c, t_d):
     next_year = current_year
     previous_year = current_year
     next_week = current_week + 1
-    previous_week = current_week - 1;
+    previous_week = current_week - 1
 
     if current_week + 1 == 53:
         next_week = 1
