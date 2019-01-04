@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/realm01/wifi-observer.svg?branch=master)](https://travis-ci.org/realm01/wifi-observer)
+[![Build Status](https://travis-ci.org/realmar/wifi-observer.svg?branch=master)](https://travis-ci.org/realmar/wifi-observer)
 [![Coverage Status](https://coveralls.io/repos/github/realm01/wifi-observer/badge.svg?branch=master)](https://coveralls.io/github/realm01/wifi-observer?branch=master)
 
 wifi-observer
